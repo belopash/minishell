@@ -6,14 +6,14 @@
 /*   By: bbrock <bbrock@student.21-school.ru>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/05 13:20:55 by bbrock            #+#    #+#             */
-/*   Updated: 2021/01/08 15:15:40 by bbrock           ###   ########.fr       */
+/*   Updated: 2021/01/10 19:08:30 by bbrock           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <limits.h>
 #include <unistd.h>
 #include "../includes/libft.h"
-#include "../includes/buildin_commands.h"
+#include "../includes/buildins.h"
 
 int ft_pwd(char **args, char** env)
 {

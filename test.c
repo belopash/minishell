@@ -89,7 +89,7 @@ int execute(t_command command, char **envp)
 		if (command.output != 1)
 			close(command.output);
 
-		if (execbi(args[0], args, 0) == 0)
+		if (execbi(args[0], args, envp) == 0)
 			exit(0);
 
 		if (!(stat((const char *)args[0], &sb) == 0 && (sb.st_mode & (S_IXUSR | S_IXGRP | S_IXOTH))))
@@ -311,7 +311,7 @@ int ft_minishell(char **env)
 
 	while (1)
 	{
-		write(1, "\e[1;34mminishell\e[0m$>", 23);
+		write(1, "\e[1;34mminishell\e[0m$> ", 23);
 		int r = get_next_line(0, &line);
 		if (r == 0)
 		{

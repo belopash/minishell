@@ -6,12 +6,12 @@
 /*   By: bbrock <bbrock@student.21-school.ru>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/07 19:20:44 by bbrock            #+#    #+#             */
-/*   Updated: 2021/01/08 13:53:39 by bbrock           ###   ########.fr       */
+/*   Updated: 2021/01/10 19:07:59 by bbrock           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/t_buildin.h"
-#include "../includes/buildin_commands.h"
+#include "../includes/buildins.h"
 #include <unistd.h>
 #include "../includes/libft.h"
 
@@ -21,6 +21,7 @@ static t_buildin *find_buildin(char *name)
 		(t_buildin){"echo", ft_echo},
 		(t_buildin){"cd", ft_cd},
 		(t_buildin){"pwd", ft_pwd},
+		(t_buildin){"env", ft_env},
 		{0, 0}};
 	int i = 0;
 

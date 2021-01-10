@@ -6,12 +6,12 @@
 /*   By: bbrock <bbrock@student.21-school.ru>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/05 13:50:29 by bbrock            #+#    #+#             */
-/*   Updated: 2021/01/08 14:01:01 by bbrock           ###   ########.fr       */
+/*   Updated: 2021/01/10 19:08:11 by bbrock           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/libft.h"
-#include "../includes/buildin_commands.h"
+#include "../includes/buildins.h"
 
 char	*ft_getenv(const char *name, char **env)
 {
