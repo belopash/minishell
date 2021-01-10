@@ -10,21 +10,6 @@
 #include <sys/stat.h>
 #include "./includes/t_command.h"
 
-// void multi_free(int count, ...)
-// {
-//     int i;
-//     va_list list;
-
-//     i = 0;
-//     va_start(list, count);
-//     while (i < count)
-//     {
-//         free(va_arg(list, void *));
-//         i++;
-//     }
-//     va_end(list);
-// }
-
 char **ft_create_array(t_list *list)
 {
 	int i;
@@ -108,9 +93,7 @@ int execute(t_command command, char **envp)
 			exit(0);
 
 		if (!(stat((const char *)args[0], &sb) == 0 && (sb.st_mode & (S_IXUSR | S_IXGRP | S_IXOTH))))
-		{
 			exit(-1);
-		}
 
 		return execve(args[0], args, envp);
 	}
