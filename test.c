@@ -10,8 +10,6 @@
 #include <sys/stat.h>
 #include "./includes/t_command.h"
 # include <limits.h>
-
-
 #include <fcntl.h>
 
 char **ft_create_array(t_list *list)
