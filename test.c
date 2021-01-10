@@ -9,6 +9,10 @@
 #include "includes/t_buildin.h"
 #include <sys/stat.h>
 #include "./includes/t_command.h"
+# include <limits.h>
+
+
+#include <fcntl.h>
 
 char **ft_create_array(t_list *list)
 {
@@ -52,7 +56,7 @@ char *ft_search_env(int *i, char *line, char **env)
 	char *var;
 	int j;
 
-	var = (char *)malloc(sizeof(char) * (BUFFER_SIZE + 1));
+	var = (char *)malloc(sizeof(char) * (PATH_MAX + 1));
 	j = 0;
 	while (line[*i] != ' ' && line[*i] != '$' && line[*i] != '"' && line[*i] != '\'' && line[*i] != ';' && line[*i])
 	{
@@ -104,34 +108,63 @@ int execute(t_command command, char **envp)
 	free(args);
 }
 
+void ft_add_arg(int *j, char **content, int *flag_right_redirect, int *flag_left_redirect, t_command *command)
+{
+    (*content)[*j] = '\0';
+    *j = 0;
+    
+    if (*flag_right_redirect == 0 && *flag_left_redirect == 0)
+    {
+        ft_lstadd_back(&(command->list), ft_lstnew(ft_strdup(*content)));
+    }
+    else
+    {
+        if(*flag_right_redirect != 0)
+        {
+            
+            if (*flag_right_redirect == 1)
+                command->output = open(*content, O_CREAT | O_WRONLY | O_TRUNC);
+            else
+                command->output = open(*content, O_CREAT | O_WRONLY | O_APPEND);
+            *flag_right_redirect = 0;
+        }
+        if(*flag_left_redirect != 0)
+        {
+            command->input = open(*content, O_CREAT | O_RDONLY);
+            *flag_left_redirect = 0;
+        }
+    }
+}
+
+
 int ft_parsing(char *line, char **env)
 {
 	char *content;
 	int i;
 	int j;
 
-	content = (char *)malloc(sizeof(char) * (BUFFER_SIZE + 1));
+	content = (char *)malloc(sizeof(char) * (PATH_MAX + 1));
 	i = 0;
 	j = 0;
 	t_command command = (t_command){0, 1, NULL};
+    
+    int flag_right_redirect = 0;
+    int flag_left_redirect = 0;
 	while (line[i])
 	{
 
 		if (line[i] == ';')
 		{
-			if (j > 0)
-			{
-				content[j] = '\0';
-				ft_lstadd_back(&(command.list), ft_lstnew(ft_strdup(content)));
-				j = 0;
-			}
+            if (j > 0)
+                ft_add_arg(&j, &content, &flag_right_redirect, &flag_left_redirect, &command);
 
 			int pid;
 			int status;
 			execute(command, env);
 
 			while ((pid = wait(&status)) > 0)
-				;
+                ;
+            
 			command = (t_command){0, 1, NULL};
 			i++;
 			continue;
@@ -139,12 +172,8 @@ int ft_parsing(char *line, char **env)
 
 		if (line[i] == '|')
 		{
-			if (j > 0)
-			{
-				content[j] = '\0';
-				ft_lstadd_back(&(command.list), ft_lstnew(ft_strdup(content)));
-				j = 0;
-			}
+            if (j > 0)
+                ft_add_arg(&j, &content, &flag_right_redirect, &flag_left_redirect, &command);
 			// ft_putendl_fd(ft_together(command.list), 1);
 
 			int fd_p[2];
@@ -160,24 +189,18 @@ int ft_parsing(char *line, char **env)
 
 		if (line[i] == '>')
 		{
-			if (j > 0)
-			{
-				content[j] = '\0';
-				ft_lstadd_back(&(command.list), ft_lstnew(ft_strdup(content)));
-				j = 0;
-			}
+            if (j > 0)
+                ft_add_arg(&j, &content, &flag_right_redirect, &flag_left_redirect, &command);
+            flag_right_redirect++;;
 			i++;
 			continue;
 		}
 
 		if (line[i] == '<')
 		{
-			if (j > 0)
-			{
-				content[j] = '\0';
-				ft_lstadd_back(&(command.list), ft_lstnew(ft_strdup(content)));
-				j = 0;
-			}
+            if (j > 0)
+                ft_add_arg(&j, &content, &flag_right_redirect, &flag_left_redirect, &command);
+            flag_left_redirect = 1;
 			i++;
 			continue;
 		}
@@ -187,17 +210,18 @@ int ft_parsing(char *line, char **env)
 			i++;
 			char *tmp;
 			tmp = ft_search_env(&i, line, env);
+            
 			while (tmp[0])
 			{
 				content[j] = tmp[0];
 				tmp++;
 				j++;
 			}
-			if ((line[i] == ' ' || line[i] == '\0') && j > 0)
+            
+			if (line[i] == ' ' || line[i] == '\0')
 			{
-				content[j] = '\0';
-				ft_lstadd_back(&(command.list), ft_lstnew(ft_strdup(content)));
-				j = 0;
+                if (j > 0)
+                    ft_add_arg(&j, &content, &flag_right_redirect, &flag_left_redirect, &command);
 			}
 			continue;
 		}
@@ -236,11 +260,10 @@ int ft_parsing(char *line, char **env)
 			}
 			if (line[i] == '"')
 				i++;
-			if ((line[i] == ' ' || line[i] == '\0') && j > 0)
+			if (line[i] == ' ' || line[i] == '\0')
 			{
-				content[j] = '\0';
-				ft_lstadd_back(&(command.list), ft_lstnew(ft_strdup(content)));
-				j = 0;
+				if (j > 0)
+                    ft_add_arg(&j, &content, &flag_right_redirect, &flag_left_redirect, &command);
 			}
 			continue;
 		}
@@ -265,11 +288,10 @@ int ft_parsing(char *line, char **env)
 			}
 			if (line[i] == '\'')
 				i++;
-			if ((line[i] == ' ' || line[i] == '\0') && j > 0)
+			if (line[i] == ' ' || line[i] == '\0')
 			{
-				content[j] = '\0';
-				ft_lstadd_back(&(command.list), ft_lstnew(ft_strdup(content)));
-				j = 0;
+                if (j > 0)
+                ft_add_arg(&j, &content, &flag_right_redirect, &flag_left_redirect, &command);
 			}
 			continue;
 		}
@@ -286,14 +308,12 @@ int ft_parsing(char *line, char **env)
 		content[j] = line[i];
 		j++;
 		i++;
-		if ((line[i] == ' ' || line[i] == '\0') && j > 0)
+		if (line[i] == ' ' || line[i] == '\0')
 		{
-			content[j] = '\0';
-			ft_lstadd_back(&(command.list), ft_lstnew(ft_strdup(content)));
-			j = 0;
+			if (j > 0)
+                ft_add_arg(&j, &content, &flag_right_redirect, &flag_left_redirect, &command);
 		}
 	}
-	char **args = ft_create_array(command.list);
 	execute(command, env);
 
 	int pid;

@@ -11,7 +11,7 @@
 /* ************************************************************************** */
 
 #ifndef T_COMMAND_H
-#define T_COMMNAD_H
+#define T_COMMAND_H
 
 #include "./libft.h"
 

@@ -13,7 +13,7 @@
 #ifndef BUILDIN_COMMANDS_H
 # define BUILDIN_COMMANDS_H
 
-# include <linux/limits.h>
+# include <limits.h>
 
 int ft_echo(char **args, char** env);
 int ft_pwd(char **args, char** env);
