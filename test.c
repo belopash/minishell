@@ -12,6 +12,7 @@
 #include "includes/buildins.h"
 #include <fcntl.h>
 
+
 char **ft_create_array(t_list *list)
 {
 	int i;
