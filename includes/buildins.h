@@ -6,7 +6,7 @@
 /*   By: bbrock <bbrock@student.21-school.ru>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/07 19:24:32 by bbrock            #+#    #+#             */
-/*   Updated: 2021/01/11 12:43:12 by bbrock           ###   ########.fr       */
+/*   Updated: 2021/01/11 19:49:58 by bbrock           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,9 +17,12 @@
 #ifndef PATH_MAX
 #include <linux/limits.h>
 #endif
-int ft_echo(char **args, char **env);
-int ft_pwd(char **args, char **env);
-int ft_cd(char **args, char **env);
-int ft_env(char **args, char **env);
+#include "t_shell.h"
+
+int ft_echo(t_shell *shell, char **args);
+int ft_pwd(t_shell *shell, char **args);
+int ft_cd(t_shell *shell, char **args);
+int ft_env(t_shell *shell, char **args);
+int execbi(t_shell *shell, char **args);
 
 #endif

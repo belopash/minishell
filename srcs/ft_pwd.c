@@ -6,7 +6,7 @@
 /*   By: bbrock <bbrock@student.21-school.ru>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/05 13:20:55 by bbrock            #+#    #+#             */
-/*   Updated: 2021/01/10 19:08:30 by bbrock           ###   ########.fr       */
+/*   Updated: 2021/01/11 19:50:44 by bbrock           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,8 +14,9 @@
 #include <unistd.h>
 #include "../includes/libft.h"
 #include "../includes/buildins.h"
+#include "../includes/t_shell.h"
 
-int ft_pwd(char **args, char** env)
+int ft_pwd(t_shell *shell, char **args)
 {
     char buf[PATH_MAX + 1];
 

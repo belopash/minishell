@@ -6,7 +6,7 @@
 /*   By: bbrock <bbrock@student.21-school.ru>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/07 19:20:44 by bbrock            #+#    #+#             */
-/*   Updated: 2021/01/10 19:07:59 by bbrock           ###   ########.fr       */
+/*   Updated: 2021/01/11 19:45:28 by bbrock           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,12 +34,12 @@ static t_buildin *find_buildin(char *name)
 	return NULL;
 }
 
-int execbi(char *name, char **args, char **envp)
+int execbi(t_shell *shell, char **args)
 {
 	t_buildin *buildin;
 
-	if (!(buildin = find_buildin(name)))
+	if (!(buildin = find_buildin(args[0])))
 		return -1;
 
-	return buildin->command(args, envp);
+	return buildin->command(shell, args);
 }

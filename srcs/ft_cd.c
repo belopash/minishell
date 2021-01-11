@@ -6,12 +6,13 @@
 /*   By: bbrock <bbrock@student.21-school.ru>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/05 13:50:29 by bbrock            #+#    #+#             */
-/*   Updated: 2021/01/11 14:22:20 by bbrock           ###   ########.fr       */
+/*   Updated: 2021/01/11 19:50:38 by bbrock           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/libft.h"
 #include "../includes/buildins.h"
+#include "../includes/t_shell.h"
 
 static char	*ft_getenv(const char *name, char **env)
 {
@@ -61,7 +62,7 @@ void	ft_update_env(char **env)
 	}
 }
 
-int		ft_cd(char **args, char **env)
+int		ft_cd(t_shell *shell, char **args)
 {
 	char	*new_path;
 	char	old_dir[PATH_MAX];
@@ -72,7 +73,7 @@ int		ft_cd(char **args, char **env)
 	return_var = 0;
 	if (!new_path)
 	{
-		if (!(new_path = ft_getenv("HOME", env)))
+		if (!(new_path = ft_getenv("HOME", shell->env)))
 			ft_putstr_fd("No 'HOME' var in environment", 1);
 	}
 	if ((return_var = chdir(new_path)))
@@ -81,7 +82,7 @@ int		ft_cd(char **args, char **env)
 		ft_putstr_fd(new_path, 1);
 		ft_putchar_fd('\n', 1);
 	}
-	ft_update_env(env);
+	ft_update_env(shell->env);
 	free(new_path);
 	return (return_var);
 }

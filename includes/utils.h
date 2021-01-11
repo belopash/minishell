@@ -1,26 +1,20 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   t_buildin.h                                        :+:      :+:    :+:   */
+/*   utils.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: bbrock <bbrock@student.21-school.ru>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2021/01/07 19:18:01 by bbrock            #+#    #+#             */
-/*   Updated: 2021/01/11 19:41:55 by bbrock           ###   ########.fr       */
+/*   Created: 2021/01/11 18:19:00 by bbrock            #+#    #+#             */
+/*   Updated: 2021/01/11 18:25:50 by bbrock           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef T_BUILIN_H
-#define T_BUILIN_H
+#ifndef UTILS_H
+#define UTILS_H
 
-#include "t_shell.h"
-
-typedef struct s_buildin
-{
-    char *name;
-    int (*command)(t_shell *shell, char **argv);
-} t_buildin;
-
-int execbi(t_shell *shell, char **args);
+char *ft_getenv(const char *name, char **env);
+char *ft_pathjoin(char *path1, char *path2);
+char **ft_toarray(t_list *list);
 
 #endif
