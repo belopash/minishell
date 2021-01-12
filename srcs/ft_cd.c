@@ -6,7 +6,7 @@
 /*   By: bbrock <bbrock@student.21-school.ru>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/05 13:50:29 by bbrock            #+#    #+#             */
-/*   Updated: 2021/01/11 19:50:38 by bbrock           ###   ########.fr       */
+/*   Updated: 2021/01/12 12:15:54 by bbrock           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,25 +64,25 @@ void	ft_update_env(char **env)
 
 int		ft_cd(t_shell *shell, char **args)
 {
-	char	*new_path;
-	char	old_dir[PATH_MAX];
-	int		return_var;
+	// char	*new_path;
+	// char	old_dir[PATH_MAX];
+	// int		return_var;
 
-	new_path = (char*)args[1];
-	getcwd(old_dir, PATH_MAX);
-	return_var = 0;
-	if (!new_path)
-	{
-		if (!(new_path = ft_getenv("HOME", shell->env)))
-			ft_putstr_fd("No 'HOME' var in environment", 1);
-	}
-	if ((return_var = chdir(new_path)))
-	{
-		ft_putstr_fd("Can't open dir: ", 1);
-		ft_putstr_fd(new_path, 1);
-		ft_putchar_fd('\n', 1);
-	}
-	ft_update_env(shell->env);
-	free(new_path);
-	return (return_var);
+	// new_path = (char*)args[1];
+	// getcwd(old_dir, PATH_MAX);
+	// return_var = 0;
+	// if (!new_path)
+	// {
+	// 	if (!(new_path = ft_getenv("HOME", shell->env)))
+	// 		ft_putstr_fd("No 'HOME' var in environment", 1);
+	// }
+	// if ((return_var = chdir(new_path)))
+	// {
+	// 	ft_putstr_fd("Can't open dir: ", 1);
+	// 	ft_putstr_fd(new_path, 1);
+	// 	ft_putchar_fd('\n', 1);
+	// }
+	// ft_update_env(shell->env);
+	// free(new_path);
+	// return (return_var);
 }

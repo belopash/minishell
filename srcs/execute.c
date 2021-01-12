@@ -6,7 +6,7 @@
 /*   By: bbrock <bbrock@student.21-school.ru>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/11 18:16:09 by bbrock            #+#    #+#             */
-/*   Updated: 2021/01/11 19:55:46 by bbrock           ###   ########.fr       */
+/*   Updated: 2021/01/12 12:15:32 by bbrock           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,7 @@ int execute(t_shell *shell, t_command command)
         if (execbi(shell, args) == 0)
             exit(0);
 
-        char **paths = ft_split(ft_getenv("PATH", shell->env) + 5, ':');
+        char **paths = ft_split(shell->getenv(shell, "PATH"), ':');
         int i = 0;
 
         char *path = args[0];
@@ -49,7 +49,7 @@ int execute(t_shell *shell, t_command command)
             i++;
 		}
 
-		return execve(path, args, shell->env);
+		return execve(path, args, ft_toarray(shell->env));
     }
     if (command.input != 0)
         close(command.input);

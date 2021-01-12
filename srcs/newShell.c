@@ -6,7 +6,7 @@
 /*   By: bbrock <bbrock@student.21-school.ru>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/11 19:05:21 by bbrock            #+#    #+#             */
-/*   Updated: 2021/01/11 19:56:31 by bbrock           ###   ########.fr       */
+/*   Updated: 2021/01/12 12:17:27 by bbrock           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,7 @@
 #include "../includes/buildins.h"
 #include "../includes/minishell.h"
 #include "../includes/libft.h"
+#include "../includes/utils.h"
 
 char **ft_create_array(t_list *list)
 {
@@ -136,7 +137,6 @@ void putnlandname()
 
 void putnl()
 {
-    write(1, "\n", 1);
 }
 int ft_parsing(t_shell *shell, char *line)
 {
@@ -213,7 +213,7 @@ int ft_parsing(t_shell *shell, char *line)
         {
             i++;
             char *tmp;
-            tmp = ft_search_env(&i, line, shell->env);
+            tmp = ft_search_env(&i, line, ft_toarray(shell->env));
 
             while (tmp[0])
             {
@@ -239,7 +239,7 @@ int ft_parsing(t_shell *shell, char *line)
                 {
                     i++;
                     char *tmp;
-                    tmp = ft_search_env(&i, line, shell->env);
+                    tmp = ft_search_env(&i, line, ft_toarray(shell->env));
                     while (tmp[0])
                     {
                         content[j] = tmp[0];
@@ -322,6 +322,19 @@ int ft_parsing(t_shell *shell, char *line)
 }
 
 
+char *ft_getenv(t_shell *shell, char *name)
+{
+    t_list *item;
+
+	item = shell->env;
+	while (item)
+	{
+		if (ft_strncmp(item->content, name, ft_strlen(name)) == 0)
+            return (item->content + ft_strlen(name) + 1);
+		item = item->next;
+	}
+    return (NULL);
+}
 
 int start(t_shell *shell)
 {
@@ -333,7 +346,7 @@ int start(t_shell *shell)
         signal(SIGINT, putnlandname);
         print_name();
         int r = get_next_line(0, &line);
-        if (!ft_strlen(line))
+        if (!ft_strlen(line) && r > 0)
             continue;
         if (!ft_strncmp(line, "exit", 4) || r <= 0)
         {
@@ -352,8 +365,10 @@ t_shell *newShell(char **env)
 
     if (!(shell = malloc(sizeof(t_shell))))
         return (NULL);
+    if (!(shell->env = ft_tolist(env)))
+		return (NULL);
     shell->in = dup(0);
     shell->out = dup(1);
     shell->start = start;
-    shell->env = env;
+    shell->getenv = ft_getenv;
 }

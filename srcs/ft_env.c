@@ -6,7 +6,7 @@
 /*   By: bbrock <bbrock@student.21-school.ru>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/07 14:56:38 by bbrock            #+#    #+#             */
-/*   Updated: 2021/01/11 19:50:41 by bbrock           ###   ########.fr       */
+/*   Updated: 2021/01/12 12:10:01 by bbrock           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,14 +15,14 @@
 
 int ft_env(t_shell *shell, char **args)
 {
-	int	i;
+	t_list *item;
 
-	i = 0;
+	item = shell->env;
 	(void)args;
-	while (shell->env[i])
+	while (item)
 	{
-		ft_putendl_fd(shell->env[i++], 1);
-		i++;
+		ft_putendl_fd(item->content, 1);
+		item = item->next;
 	}
 	return (0);
 }
