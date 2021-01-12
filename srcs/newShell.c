@@ -6,7 +6,7 @@
 /*   By: bbrock <bbrock@student.21-school.ru>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/11 19:05:21 by bbrock            #+#    #+#             */
-/*   Updated: 2021/01/12 12:17:27 by bbrock           ###   ########.fr       */
+/*   Updated: 2021/01/12 17:52:26 by bbrock           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -122,6 +122,7 @@ void ft_add_arg(int *j, char **content, int *flag_right_redirect, int *flag_left
             command->input = open(*content, O_CREAT | O_RDONLY, 0666);
             *flag_left_redirect = 0;
         }
+        command->filename = *content;
     }
 }
 int print_name()
@@ -147,8 +148,8 @@ int ft_parsing(t_shell *shell, char *line)
     content = (char *)malloc(sizeof(char) * (PATH_MAX + 1));
     i = 0;
     j = 0;
-    t_command command = (t_command){0, 1, NULL};
-    
+    t_command command = (t_command){0, 1, NULL, 0, 0};
+
     signal(SIGINT, putnl);
 
     int flag_right_redirect = 0;
@@ -167,7 +168,7 @@ int ft_parsing(t_shell *shell, char *line)
 
             while ((pid = wait(&status)) > 0)
                 ;
-            command = (t_command){0, 1, NULL};
+            command = (t_command){0, 1, NULL, 0};
             i++;
             continue;
         }
@@ -180,12 +181,18 @@ int ft_parsing(t_shell *shell, char *line)
 
             int fd_p[2];
             pipe(fd_p);
-            if (command.output == 1)
+            if (command.type == DEFAULT)
                 command.output = fd_p[1];
-            else
-                dup2(command.output, fd_p[0]);
+            command.type = command.type | PIPE;
+
+            if (command.type == REDPIPE)
+            {
+                int fd = open((command.filename), O_RDONLY, 0666);
+                dup2(fd, fd_p[0]);
+            }
+
             execute(shell, command);
-            command = (t_command){fd_p[0], 1, NULL};
+            command = (t_command){fd_p[0], 1, NULL, 0, 0};
 
             i++;
             continue;
@@ -196,6 +203,7 @@ int ft_parsing(t_shell *shell, char *line)
             if (j > 0)
                 ft_add_arg(&j, &content, &flag_right_redirect, &flag_left_redirect, &command);
             flag_right_redirect++;
+            command.type = command.type | REDIRECT;
             i++;
             continue;
         }
@@ -321,18 +329,17 @@ int ft_parsing(t_shell *shell, char *line)
     return (0);
 }
 
-
 char *ft_getenv(t_shell *shell, char *name)
 {
     t_list *item;
 
-	item = shell->env;
-	while (item)
-	{
-		if (ft_strncmp(item->content, name, ft_strlen(name)) == 0)
+    item = shell->env;
+    while (item)
+    {
+        if (ft_strncmp(item->content, name, ft_strlen(name)) == 0)
             return (item->content + ft_strlen(name) + 1);
-		item = item->next;
-	}
+        item = item->next;
+    }
     return (NULL);
 }
 
@@ -366,7 +373,7 @@ t_shell *newShell(char **env)
     if (!(shell = malloc(sizeof(t_shell))))
         return (NULL);
     if (!(shell->env = ft_tolist(env)))
-		return (NULL);
+        return (NULL);
     shell->in = dup(0);
     shell->out = dup(1);
     shell->start = start;
