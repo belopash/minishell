@@ -6,7 +6,7 @@
 /*   By: bbrock <bbrock@student.21-school.ru>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/05 15:42:15 by bbrock            #+#    #+#             */
-/*   Updated: 2021/01/12 17:43:50 by bbrock           ###   ########.fr       */
+/*   Updated: 2021/01/13 18:45:27 by bbrock           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,13 @@
 #define REDIRECT 010
 #define REDPIPE 011
 
+typedef struct s_flags
+{
+	int redir_r;
+	int redir_l;
+} t_flags;
+
+
 typedef struct s_command
 {
 	int input;
@@ -27,6 +34,7 @@ typedef struct s_command
 	t_list *list;
 	int type;
 	char *filename;
+	t_flags flags;
 } t_command;
 
 #endif

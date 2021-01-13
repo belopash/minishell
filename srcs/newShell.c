@@ -6,7 +6,7 @@
 /*   By: bbrock <bbrock@student.21-school.ru>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/11 19:05:21 by bbrock            #+#    #+#             */
-/*   Updated: 2021/01/12 17:55:49 by bbrock           ###   ########.fr       */
+/*   Updated: 2021/01/13 18:44:52 by bbrock           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -98,29 +98,29 @@ void ft_exit()
     write(1, "\n", 1);
 }
 
-void ft_add_arg(int *j, char **content, int *flag_right_redirect, int *flag_left_redirect, t_command *command)
+void ft_add_arg(int *j, char **content, t_command *command)
 {
     (*content)[*j] = '\0';
     *j = 0;
 
-    if (*flag_right_redirect == 0 && *flag_left_redirect == 0)
+    if (command->flags.redir_r == 0 && command->flags.redir_l == 0)
     {
         ft_lstadd_back(&(command->list), ft_lstnew(ft_strdup(*content)));
     }
     else
     {
-        if (*flag_right_redirect != 0)
+        if (command->flags.redir_r != 0)
         {
-            if (*flag_right_redirect == 1)
+            if (command->flags.redir_r == 1)
                 command->output = open(*content, O_CREAT | O_WRONLY | O_TRUNC, 0666);
             else
                 command->output = open(*content, O_CREAT | O_WRONLY | O_APPEND, 0666);
-            *flag_right_redirect = 0;
+            command->flags.redir_r = 0;
         }
-        if (*flag_left_redirect != 0)
+        if (command->flags.redir_l != 0)
         {
             command->input = open(*content, O_CREAT | O_RDONLY, 0666);
-            *flag_left_redirect = 0;
+            command->flags.redir_l = 0;
         }
         command->filename = *content;
     }
@@ -148,19 +148,19 @@ int ft_parsing(t_shell *shell, char *line)
     content = (char *)malloc(sizeof(char) * (PATH_MAX + 1));
     i = 0;
     j = 0;
-    t_command command = (t_command){0, 1, NULL, 0, 0};
+    t_command command = (t_command){0, 1, NULL, 0, 0, {0, 0}};
 
     signal(SIGINT, putnl);
 
-    int flag_right_redirect = 0;
-    int flag_left_redirect = 0;
+    // int flag_right_redirect = 0;
+    // int flag_left_redirect = 0;
     while (!i || line[i - 1])
     {
 
         if (line[i] == ';' || line[i] == '\0')
         {
             if (j > 0)
-                ft_add_arg(&j, &content, &flag_right_redirect, &flag_left_redirect, &command);
+                ft_add_arg(&j, &content, &command);
 
             int pid;
             int status;
@@ -168,7 +168,7 @@ int ft_parsing(t_shell *shell, char *line)
 
             while ((pid = wait(&status)) > 0)
                 ;
-            command = (t_command){0, 1, NULL, 0};
+            command = (t_command){0, 1, NULL, 0, 0, {0, 0}};
             i++;
             continue;
         }
@@ -176,7 +176,7 @@ int ft_parsing(t_shell *shell, char *line)
         if (line[i] == '|')
         {
             if (j > 0)
-                ft_add_arg(&j, &content, &flag_right_redirect, &flag_left_redirect, &command);
+                ft_add_arg(&j, &content, &command);
             // ft_putendl_fd(ft_together(command.list), 1);
 
             int fd_p[2];
@@ -201,8 +201,8 @@ int ft_parsing(t_shell *shell, char *line)
         if (line[i] == '>')
         {
             if (j > 0)
-                ft_add_arg(&j, &content, &flag_right_redirect, &flag_left_redirect, &command);
-            flag_right_redirect++;
+                ft_add_arg(&j, &content, &command);
+            command.flags.redir_r++;
             command.type = command.type | REDIRECT;
             i++;
             continue;
@@ -211,8 +211,8 @@ int ft_parsing(t_shell *shell, char *line)
         if (line[i] == '<')
         {
             if (j > 0)
-                ft_add_arg(&j, &content, &flag_right_redirect, &flag_left_redirect, &command);
-            flag_left_redirect = 1;
+                ft_add_arg(&j, &content, &command);
+            command.flags.redir_l = 1;
             i++;
             continue;
         }
@@ -233,7 +233,7 @@ int ft_parsing(t_shell *shell, char *line)
             if (line[i] == ' ' || line[i] == '\0')
             {
                 if (j > 0)
-                    ft_add_arg(&j, &content, &flag_right_redirect, &flag_left_redirect, &command);
+                    ft_add_arg(&j, &content, &command);
             }
             continue;
         }
@@ -275,7 +275,7 @@ int ft_parsing(t_shell *shell, char *line)
             if (line[i] == ' ' || line[i] == '\0')
             {
                 if (j > 0)
-                    ft_add_arg(&j, &content, &flag_right_redirect, &flag_left_redirect, &command);
+                    ft_add_arg(&j, &content, &command);
             }
             continue;
         }
@@ -303,7 +303,7 @@ int ft_parsing(t_shell *shell, char *line)
             if (line[i] == ' ' || line[i] == '\0')
             {
                 if (j > 0)
-                    ft_add_arg(&j, &content, &flag_right_redirect, &flag_left_redirect, &command);
+                    ft_add_arg(&j, &content, &command);
             }
             continue;
         }
@@ -323,7 +323,7 @@ int ft_parsing(t_shell *shell, char *line)
         if (line[i] == ' ' || line[i] == '\0')
         {
             if (j > 0)
-                ft_add_arg(&j, &content, &flag_right_redirect, &flag_left_redirect, &command);
+                ft_add_arg(&j, &content, &command);
         }
     }
     return (0);
@@ -378,4 +378,5 @@ t_shell *newShell(char **env)
     shell->out = dup(1);
     shell->start = start;
     shell->getenv = ft_getenv;
+    return shell;
 }
