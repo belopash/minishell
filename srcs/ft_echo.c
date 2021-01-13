@@ -6,12 +6,13 @@
 /*   By: bbrock <bbrock@student.21-school.ru>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/05 12:09:06 by bbrock            #+#    #+#             */
-/*   Updated: 2021/01/10 13:40:02 by bbrock           ###   ########.fr       */
+/*   Updated: 2021/01/11 19:50:52 by bbrock           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <stdbool.h>
 #include "../includes/libft.h"
+#include "../includes/t_shell.h"
 
 static bool ft_isflags(char *flags, char *str)
 {
@@ -28,7 +29,7 @@ static bool ft_isflags(char *flags, char *str)
 	return i && true;
 }
 
-int ft_echo(char **args, char **env)
+int ft_echo(t_shell *shell, char **args)
 {
 	int i;
 	bool nonewline;

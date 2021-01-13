@@ -6,22 +6,23 @@
 /*   By: bbrock <bbrock@student.21-school.ru>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/07 14:56:38 by bbrock            #+#    #+#             */
-/*   Updated: 2021/01/10 19:09:01 by bbrock           ###   ########.fr       */
+/*   Updated: 2021/01/12 12:10:01 by bbrock           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/libft.h"
+#include "../includes/t_shell.h"
 
-int ft_env(char **args, char** env)
+int ft_env(t_shell *shell, char **args)
 {
-	int	i;
+	t_list *item;
 
-	i = 0;
+	item = shell->env;
 	(void)args;
-	while (env[i])
+	while (item)
 	{
-		ft_putendl_fd((char*)env[i++], 1);
-		i++;
+		ft_putendl_fd(item->content, 1);
+		item = item->next;
 	}
 	return (0);
 }

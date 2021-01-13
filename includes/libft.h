@@ -17,7 +17,7 @@
 # include <string.h>
 # include <unistd.h>
 
-#define BUFFER_SIZE 1000
+#define BUFFER_SIZE 32
 
 typedef	unsigned char	t_byte;
 typedef	struct			s_list

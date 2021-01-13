@@ -1,26 +1,30 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   t_buildin.h                                        :+:      :+:    :+:   */
+/*   t_shell.h                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: bbrock <bbrock@student.21-school.ru>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2021/01/07 19:18:01 by bbrock            #+#    #+#             */
-/*   Updated: 2021/01/11 19:41:55 by bbrock           ###   ########.fr       */
+/*   Created: 2021/01/05 15:42:15 by bbrock            #+#    #+#             */
+/*   Updated: 2021/01/12 12:04:29 by bbrock           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef T_BUILIN_H
-#define T_BUILIN_H
+#ifndef T_SHELL_H
+#define T_SHELL_H
 
-#include "t_shell.h"
+#include "libft.h"
 
-typedef struct s_buildin
+typedef struct s_shell
 {
-    char *name;
-    int (*command)(t_shell *shell, char **argv);
-} t_buildin;
+	int in;
+	int out;
+	int waiting;
+	t_list *env;
+	int (*start)(struct s_shell *);
+	char *(*getenv)(struct s_shell *, char *);
+} t_shell;
 
-int execbi(t_shell *shell, char **args);
+t_shell *newShell(char **env);
 
 #endif
