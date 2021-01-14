@@ -6,7 +6,7 @@
 /*   By: bbrock <bbrock@student.21-school.ru>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/11 19:05:21 by bbrock            #+#    #+#             */
-/*   Updated: 2021/01/13 18:44:52 by bbrock           ###   ########.fr       */
+/*   Updated: 2021/01/14 18:41:40 by bbrock           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -128,6 +128,7 @@ void ft_add_arg(int *j, char **content, t_command *command)
 int print_name()
 {
     write(1, "\e[1;34mminishell\e[0m$> ", 23);
+    return (0);
 }
 
 void putnlandname()
@@ -139,6 +140,141 @@ void putnlandname()
 void putnl()
 {
 }
+
+int ft_if_env(int *j, char *content, char *line, t_shell *shell)
+{
+    int i;
+    i = 0;
+    if (line[i] == '$' && line[i + 1] != '\\' && line[i + 1] != ' ' && line[i + 1] != '\'' && line[i + 1] != '"' && line[i + 1] != '\0')
+           {
+               i++;
+               char *tmp;
+               tmp = ft_search_env(&i, line, ft_toarray(shell->env));
+               while (tmp[0])
+               {
+                   content[*j] = tmp[0];
+                   tmp++;
+                   (*j)++;
+               }
+           }
+    return(i);
+}
+
+int ft_if_double_quotes(int *j, char *content, char *line, t_shell *shell)
+{
+    int i;
+    i = 0;
+    if (line[i] == '"')
+    {
+        i++;
+        while (line[i] != '"' && line[i])
+        {
+            i += ft_if_env(j, content, line + i, shell);
+            if (line[i] == '\\' && (line[i + 1] == '\\' || line[i + 1] == '\'' || line[i + 1] == '"' || line[i + 1] == '$'))
+                i++;
+            while (line[i] != '\0' && line[i] != '\'' && line[i] != '"' && line[i] != '$')
+            {
+                if (line[i] == '\\' && (line[i + 1] == 'n'))
+                {
+                    content[*j] = '\n';
+                    (*j)++;
+                    i += 2;
+                    continue;
+                }
+                content[*j] = line[i];
+                (*j)++;
+                i++;
+            }
+        }
+        i++;
+    }
+    return(i);
+}
+
+int ft_if_single_quotes(int *j, char *content, char *line, t_shell *shell)
+{
+    int i;
+    i = 0;
+    
+    if (line[i] == '\'')
+    {
+        i++;
+        while (line[i] != '\'' && line[i])
+        {
+            if (line[i] == '\\' && (line[i + 1] == 'n'))
+            {
+                i += 2;
+                content[*j] = '\n';
+                (*j)++;
+                continue;
+            }
+            if (line[i] == '\\' && (line[i + 1] == '\\'))
+                i++;
+            content[*j] = line[i];
+            (*j)++;
+            i++;
+        }
+        i++;
+    }
+    return(i);
+}
+
+int if_next_command(int *i, char *line, t_command *command, t_shell *shell)
+{
+    if (line[*i] == ';' || line[*i] == '\0')
+    {
+        int pid;
+        int status;
+        execute(shell, *command);
+        while ((pid = wait(&status)) > 0)
+            ;
+        *command = (t_command){0, 1, NULL, 0, 0, {0, 0}};
+        (*i)++;
+        return (1);
+    }
+    return (0);
+}
+
+int ft_if_pipe(int *i, char *line, t_command *command, t_shell *shell)
+{
+    if (line[*i] == '|')
+    {
+        int fd_p[2];
+        pipe(fd_p);
+        if (command->type == DEFAULT)
+            command->output = fd_p[1];
+        command->type = command->type | PIPE;
+        if (command->type == REDPIPE)
+        {
+            int fd = open((command->filename), O_RDONLY, 0666);
+            dup2(fd, fd_p[0]);
+        }
+        execute(shell, *command);
+        *command = (t_command){fd_p[0], 1, NULL, 0, 0, {0, 0}};
+        (*i)++;
+        return (1);
+    }
+    return (0);
+}
+
+int ft_if_redirect(int *i, char *line, t_command *command)
+{
+    if (line[*i] == '>')
+    {
+        (command->flags.redir_r)++;
+        command->type = command->type | REDIRECT;
+        (*i)++;
+        return(1);
+    }
+    if (line[*i] == '<')
+    {
+        command->flags.redir_l = 1;
+        (*i)++;
+        return(1);
+    }
+    return(0);
+}
+
 int ft_parsing(t_shell *shell, char *line)
 {
     char *content;
@@ -149,181 +285,32 @@ int ft_parsing(t_shell *shell, char *line)
     i = 0;
     j = 0;
     t_command command = (t_command){0, 1, NULL, 0, 0, {0, 0}};
-
     signal(SIGINT, putnl);
-
-    // int flag_right_redirect = 0;
-    // int flag_left_redirect = 0;
     while (!i || line[i - 1])
     {
-
-        if (line[i] == ';' || line[i] == '\0')
-        {
-            if (j > 0)
-                ft_add_arg(&j, &content, &command);
-
-            int pid;
-            int status;
-            execute(shell, command);
-
-            while ((pid = wait(&status)) > 0)
-                ;
-            command = (t_command){0, 1, NULL, 0, 0, {0, 0}};
-            i++;
+        if ((line[i] == ' ' || line[i] == '\0' || line[i] == ';' || line[i] == '|' || line[i] == '>' || line[i] == '<') && (j > 0))
+            ft_add_arg(&j, &content, &command);
+        if (if_next_command(&i, line, &command, shell))
             continue;
-        }
-
-        if (line[i] == '|')
-        {
-            if (j > 0)
-                ft_add_arg(&j, &content, &command);
-            // ft_putendl_fd(ft_together(command.list), 1);
-
-            int fd_p[2];
-            pipe(fd_p);
-            if (command.type == DEFAULT)
-                command.output = fd_p[1];
-            command.type = command.type | PIPE;
-
-            if (command.type == REDPIPE)
-            {
-                int fd = open((command.filename), O_RDONLY, 0666);
-                dup2(fd, fd_p[0]);
-            }
-
-            execute(shell, command);
-            command = (t_command){fd_p[0], 1, NULL, 0, 0};
-
-            i++;
+        if (ft_if_pipe(&i, line, &command, shell))
             continue;
-        }
-
-        if (line[i] == '>')
-        {
-            if (j > 0)
-                ft_add_arg(&j, &content, &command);
-            command.flags.redir_r++;
-            command.type = command.type | REDIRECT;
-            i++;
+        if (ft_if_redirect(&i, line, &command))
             continue;
-        }
-
-        if (line[i] == '<')
-        {
-            if (j > 0)
-                ft_add_arg(&j, &content, &command);
-            command.flags.redir_l = 1;
-            i++;
-            continue;
-        }
-
-        if (line[i] == '$' && line[i + 1] != '\\' && line[i + 1] != ' ' && line[i + 1] != '\'' && line[i + 1] != '"' && line[i + 1] != '\0')
-        {
-            i++;
-            char *tmp;
-            tmp = ft_search_env(&i, line, ft_toarray(shell->env));
-
-            while (tmp[0])
-            {
-                content[j] = tmp[0];
-                tmp++;
-                j++;
-            }
-
-            if (line[i] == ' ' || line[i] == '\0')
-            {
-                if (j > 0)
-                    ft_add_arg(&j, &content, &command);
-            }
-            continue;
-        }
-
-        if (line[i] == '"')
-        {
-            i++;
-            while (line[i] != '"' && line[i])
-            {
-                if (line[i] == '$' && line[i + 1] != '\\' && line[i + 1] != ' ' && line[i + 1] != '\'' && line[i + 1] != '"' && line[i + 1] != '\0')
-                {
-                    i++;
-                    char *tmp;
-                    tmp = ft_search_env(&i, line, ft_toarray(shell->env));
-                    while (tmp[0])
-                    {
-                        content[j] = tmp[0];
-                        tmp++;
-                        j++;
-                    }
-                    continue;
-                }
-                if (line[i] == '\\' && (line[i + 1] == 'n'))
-                {
-                    i += 2;
-                    content[j] = '\n';
-                    j++;
-                    continue;
-                }
-                if (line[i] == '\\' && (line[i + 1] == '\\' || line[i + 1] == '\'' || line[i + 1] == '"' || line[i + 1] == '$'))
-                    i++;
-
-                content[j] = line[i];
-                j++;
-                i++;
-            }
-            if (line[i] == '"')
-                i++;
-            if (line[i] == ' ' || line[i] == '\0')
-            {
-                if (j > 0)
-                    ft_add_arg(&j, &content, &command);
-            }
-            continue;
-        }
-
-        if (line[i] == '\'')
-        {
-            i++;
-            while (line[i] != '\'' && line[i])
-            {
-                if (line[i] == '\\' && (line[i + 1] == 'n'))
-                {
-                    i += 2;
-                    content[j] = '\n';
-                    j++;
-                    continue;
-                }
-                if (line[i] == '\\' && (line[i + 1] == '\\'))
-                    i++;
-                content[j] = line[i];
-                j++;
-                i++;
-            }
-            if (line[i] == '\'')
-                i++;
-            if (line[i] == ' ' || line[i] == '\0')
-            {
-                if (j > 0)
-                    ft_add_arg(&j, &content, &command);
-            }
-            continue;
-        }
-
         if (line[i] == ' ')
         {
             i++;
             continue;
         }
-
+        i += ft_if_env(&j, content, line + i, shell);
+        i += ft_if_double_quotes(&j, content, line + i, shell);
+        i += ft_if_single_quotes(&j, content, line + i, shell);
         if (line[i] == '\\')
             i++;
-
-        content[j] = line[i];
-        j++;
-        i++;
-        if (line[i] == ' ' || line[i] == '\0')
+        while (line[i] != ' ' && line[i] != '\0' && line[i] != '\'' && line[i] != '"' && line[i] != '$' && line[i] != ';')
         {
-            if (j > 0)
-                ft_add_arg(&j, &content, &command);
+            content[j] = line[i];
+            j++;
+            i++;
         }
     }
     return (0);
