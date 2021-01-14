@@ -6,7 +6,7 @@
 /*   By: bbrock <bbrock@student.21-school.ru>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/11 18:16:09 by bbrock            #+#    #+#             */
-/*   Updated: 2021/01/12 17:23:24 by bbrock           ###   ########.fr       */
+/*   Updated: 2021/01/14 19:12:24 by bbrock           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,35 +25,35 @@ int execute(t_shell *shell, t_command command)
     struct stat sb;
 
     char **args = ft_toarray(command.list);
-    if (!fork())
-    {
-        dup2(command.input, 0);
-        dup2(command.output, 1);
-        if (command.input != 0)
-            close(command.input);
-        if (command.output != 1)
-            close(command.output);
-
-        if (execbi(shell, args) == 0)
-            exit(0);
-
-        char **paths = ft_split(shell->getenv(shell, "PATH"), ':');
-        int i = 0;
-
-        char *path = args[0];
-        while (!(stat((const char *)path, &sb) == 0 && (sb.st_mode & (S_IXUSR | S_IXGRP | S_IXOTH))))
-		{
-            if (!paths[i])
-                exit(-1);
-            path = ft_pathjoin(paths[i], args[0]);
-            i++;
-		}
-
-		return execve(path, args, ft_toarray(shell->env));
-    }
+    dup2(command.input, 0);
+    dup2(command.output, 1);
     if (command.input != 0)
         close(command.input);
     if (command.output != 1)
         close(command.output);
+    if (execbi(shell, args) < 0)
+        if (!fork())
+        {
+
+            char **paths = ft_split(shell->get_env(shell, "PATH"), ':');
+            int i = 0;
+
+            char *path = args[0];
+            while (!(stat((const char *)path, &sb) == 0 && (sb.st_mode & (S_IXUSR | S_IXGRP | S_IXOTH))))
+            {
+                if (!paths[i])
+                    exit(-1);
+                path = ft_pathjoin(paths[i], args[0]);
+                i++;
+            }
+
+            return execve(path, args, ft_toarray(shell->env));
+        }
+    if (command.input != 0)
+        close(command.input);
+    if (command.output != 1)
+        close(command.output);
+    dup2(shell->in, 0);
+    dup2(shell->out, 1);
     free(args);
 }

@@ -6,7 +6,7 @@
 /*   By: bbrock <bbrock@student.21-school.ru>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/07 19:20:44 by bbrock            #+#    #+#             */
-/*   Updated: 2021/01/11 19:45:28 by bbrock           ###   ########.fr       */
+/*   Updated: 2021/01/14 19:54:37 by bbrock           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,8 @@ static t_buildin *find_buildin(char *name)
 		(t_buildin){"cd", ft_cd},
 		(t_buildin){"pwd", ft_pwd},
 		(t_buildin){"env", ft_env},
+		(t_buildin){"export", ft_export},
+		(t_buildin){"unset", ft_unset},
 		{0, 0}};
 	int i = 0;
 

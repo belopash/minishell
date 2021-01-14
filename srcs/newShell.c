@@ -6,7 +6,7 @@
 /*   By: bbrock <bbrock@student.21-school.ru>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/11 19:05:21 by bbrock            #+#    #+#             */
-/*   Updated: 2021/01/14 18:41:40 by bbrock           ###   ########.fr       */
+/*   Updated: 2021/01/14 19:53:31 by bbrock           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -146,18 +146,18 @@ int ft_if_env(int *j, char *content, char *line, t_shell *shell)
     int i;
     i = 0;
     if (line[i] == '$' && line[i + 1] != '\\' && line[i + 1] != ' ' && line[i + 1] != '\'' && line[i + 1] != '"' && line[i + 1] != '\0')
-           {
-               i++;
-               char *tmp;
-               tmp = ft_search_env(&i, line, ft_toarray(shell->env));
-               while (tmp[0])
-               {
-                   content[*j] = tmp[0];
-                   tmp++;
-                   (*j)++;
-               }
-           }
-    return(i);
+    {
+        i++;
+        char *tmp;
+        tmp = ft_search_env(&i, line, ft_toarray(shell->env));
+        while (tmp[0])
+        {
+            content[*j] = tmp[0];
+            tmp++;
+            (*j)++;
+        }
+    }
+    return (i);
 }
 
 int ft_if_double_quotes(int *j, char *content, char *line, t_shell *shell)
@@ -188,14 +188,14 @@ int ft_if_double_quotes(int *j, char *content, char *line, t_shell *shell)
         }
         i++;
     }
-    return(i);
+    return (i);
 }
 
 int ft_if_single_quotes(int *j, char *content, char *line, t_shell *shell)
 {
     int i;
     i = 0;
-    
+
     if (line[i] == '\'')
     {
         i++;
@@ -216,7 +216,7 @@ int ft_if_single_quotes(int *j, char *content, char *line, t_shell *shell)
         }
         i++;
     }
-    return(i);
+    return (i);
 }
 
 int if_next_command(int *i, char *line, t_command *command, t_shell *shell)
@@ -264,15 +264,15 @@ int ft_if_redirect(int *i, char *line, t_command *command)
         (command->flags.redir_r)++;
         command->type = command->type | REDIRECT;
         (*i)++;
-        return(1);
+        return (1);
     }
     if (line[*i] == '<')
     {
         command->flags.redir_l = 1;
         (*i)++;
-        return(1);
+        return (1);
     }
-    return(0);
+    return (0);
 }
 
 int ft_parsing(t_shell *shell, char *line)
@@ -353,6 +353,55 @@ int start(t_shell *shell)
     return (0);
 }
 
+char *ft_add_env(t_shell *shell, char *env)
+{
+    t_list *item;
+    int namelen;
+
+    namelen = ft_strchr(env, '=') - env;
+    item = shell->env;
+    while (item)
+    {
+        if (ft_strncmp(item->content, env, namelen) == 0 && *(char *)(item->content + namelen) == '=')
+        {
+            free(item->content);
+            if (!(item->content = ft_strdup(env)))
+                return NULL;
+            return (item->content + namelen + 1);
+        }
+        item = item->next;
+    }
+    item = ft_lstnew(ft_strdup(env));
+    ft_lstadd_back(&(shell->env), item);
+    return (item->content + namelen + 1);
+}
+
+void ft_del_env(t_shell *shell, char *name)
+{
+    t_list *item;
+    t_list *prev;
+    int namelen;
+
+    namelen = ft_strlen(name);
+    item = shell->env;
+    prev = NULL;
+    while (item)
+    {
+        if (ft_strncmp(item->content, name, namelen) == 0 && *(char *)(item->content + namelen) == '=')
+        {
+            if (prev)
+                prev->next = item->next;
+            else
+                shell->env = item->next;
+            ft_lstdelone(item, free);
+            item = NULL;
+            return;
+        }
+        prev = item;
+        item = item->next;
+    }
+}
+
 t_shell *newShell(char **env)
 {
     t_shell *shell;
@@ -364,6 +413,8 @@ t_shell *newShell(char **env)
     shell->in = dup(0);
     shell->out = dup(1);
     shell->start = start;
-    shell->getenv = ft_getenv;
+    shell->get_env = ft_getenv;
+    shell->add_env = ft_add_env;
+    shell->del_env = ft_del_env;
     return shell;
 }
