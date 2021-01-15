@@ -6,7 +6,7 @@
 /*   By: bbrock <bbrock@student.21-school.ru>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/11 19:05:21 by bbrock            #+#    #+#             */
-/*   Updated: 2021/01/15 14:48:21 by bbrock           ###   ########.fr       */
+/*   Updated: 2021/01/15 20:57:29 by bbrock           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,24 +42,35 @@ void putnlandname()
     print_name();
 }
 
+void del()
+{
+    write(1, "\b \b", 3);
+    write(1, "\b \b", 3);
+}
+
 static int start(t_shell *shell)
 {
     char *line;
     line = (char *)malloc(sizeof(char) * (BUFFER_SIZE + 1));
+    int r;
 
     while (1)
     {
         signal(SIGINT, putnlandname);
+        signal(SIGQUIT, del);
         print_name();
-        int r = get_next_line(0, &line);
-        if (!ft_strlen(line) && r > 0)
-            continue;
-        if (!ft_strncmp(line, "exit", 4) || r <= 0)
-        {
+        while (!(r = get_next_line(0, &line)) && ft_strlen(line))
+                ;
+        if (r < 0)
+            break;
+        if ((r == 0 && ft_strlen(line) == 0) || !ft_strncmp(line, "exit", 4))
+        {   
             write(1, "exit\n", 5);
             break;
         }
         ft_parsing(shell, line);
+        free(line);
+        
     }
     free(line);
     return (0);

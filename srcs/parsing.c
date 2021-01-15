@@ -250,7 +250,7 @@ int ft_parsing(t_shell *shell, char *line)
     j = 0;
     t_command *command = new_command(shell, 0, 1);
     signal(SIGINT, putnl);
-    while (!i || line[i - 1])
+    while ((!i && line[i]) || line[i - 1])
     {
         if ((line[i] == ' ' || line[i] == '\0' || line[i] == ';' || line[i] == '|' || line[i] == '>' || line[i] == '<') && (j > 0))
             ft_add_arg(&j, &content, command);
