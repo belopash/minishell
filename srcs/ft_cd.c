@@ -6,7 +6,7 @@
 /*   By: bbrock <bbrock@student.21-school.ru>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/05 13:50:29 by bbrock            #+#    #+#             */
-/*   Updated: 2021/01/14 19:25:45 by bbrock           ###   ########.fr       */
+/*   Updated: 2021/01/15 14:51:00 by bbrock           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ int ft_cd(t_shell *shell, char **args)
 		return (-1);
 	if (!(t = ft_strjoin("OLDPWD=", path)))
 		return (-1);
-	shell->add_env(shell, t);
+	shell->env->add(shell->env, t);
 	free(t);
 	if (chdir(args[1]) < 0)
 		return (-1);
@@ -31,7 +31,7 @@ int ft_cd(t_shell *shell, char **args)
 		return (-1);
 	if (!(t = ft_strjoin("PWD=", path)))
 		return (-1);
-	shell->add_env(shell, t);
+	shell->env->add(shell->env, t);
 	free(t);
 	return (0);
 }

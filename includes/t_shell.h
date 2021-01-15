@@ -6,7 +6,7 @@
 /*   By: bbrock <bbrock@student.21-school.ru>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/05 15:42:15 by bbrock            #+#    #+#             */
-/*   Updated: 2021/01/14 19:51:03 by bbrock           ###   ########.fr       */
+/*   Updated: 2021/01/15 14:46:37 by bbrock           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,19 +14,18 @@
 #define T_SHELL_H
 
 #include "libft.h"
+#include "t_env.h"
 
 typedef struct s_shell
 {
 	int in;
 	int out;
 	int waiting;
-	t_list *env;
+	t_env *env;
 	int (*start)(struct s_shell *);
-	char *(*get_env)(struct s_shell *, char *);
-	char *(*add_env)(struct s_shell *, char *);
-	void (*del_env)(struct s_shell *, char *);
+	void (*destroy)(struct s_shell *);
 } t_shell;
 
-t_shell *newShell(char **env);
+t_shell *new_shell(char **env);
 
 #endif

@@ -6,7 +6,7 @@
 /*   By: bbrock <bbrock@student.21-school.ru>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/11 18:19:12 by bbrock            #+#    #+#             */
-/*   Updated: 2021/01/13 18:45:50 by bbrock           ###   ########.fr       */
+/*   Updated: 2021/01/15 14:02:23 by bbrock           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,6 @@
 
 #include "t_command.h"
 #include "t_shell.h"
-
-int execute(t_shell *shell, t_command command);
+int ft_parsing(t_shell *shell, char *line);
 
 #endif

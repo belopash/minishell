@@ -6,7 +6,7 @@
 /*   By: bbrock <bbrock@student.21-school.ru>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/05 15:42:15 by bbrock            #+#    #+#             */
-/*   Updated: 2021/01/13 18:45:27 by bbrock           ###   ########.fr       */
+/*   Updated: 2021/01/15 14:46:43 by bbrock           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 #define T_COMMAND_H
 
 #include "./libft.h"
+#include "t_shell.h"
 
 #define DEFAULT 0
 #define PIPE 01
@@ -35,6 +36,11 @@ typedef struct s_command
 	int type;
 	char *filename;
 	t_flags flags;
+	t_shell *shell;
+	int (*execute)(struct s_command *);
+	void (*destroy)(struct s_command *);
 } t_command;
+
+t_command *new_command(t_shell *shell, int input, int output);
 
 #endif

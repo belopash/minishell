@@ -1,15 +1,3 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   newShell.c                                         :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: bbrock <bbrock@student.21-school.ru>       +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2021/01/11 19:05:21 by bbrock            #+#    #+#             */
-/*   Updated: 2021/01/14 19:53:31 by bbrock           ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
-
 #include <stdlib.h>
 #include <unistd.h>
 
@@ -29,23 +17,7 @@
 #include "../includes/libft.h"
 #include "../includes/utils.h"
 
-char **ft_create_array(t_list *list)
-{
-    int i;
-    char **argv;
-    i = 0;
-    argv = (char **)malloc(sizeof(char *) * (ft_lstsize(list) + 1));
-    while (list)
-    {
-        argv[i] = list->content;
-        list = list->next;
-        i++;
-    }
-    argv[i] = NULL;
-    return (argv);
-}
-
-void ft_lst_print(t_list *list)
+static void ft_lst_print(t_list *list)
 {
     while (list)
     {
@@ -54,7 +26,7 @@ void ft_lst_print(t_list *list)
     }
 }
 
-char *ft_together(t_list *list)
+static char *ft_together(t_list *list)
 {
     char *var = "";
     while (list)
@@ -66,7 +38,7 @@ char *ft_together(t_list *list)
     return (var);
 }
 
-char *ft_search_env(int *i, char *line, char **env)
+static char *ft_search_env(int *i, char *line, char **env)
 {
     char *var;
     int j;
@@ -93,12 +65,7 @@ char *ft_search_env(int *i, char *line, char **env)
     return (ft_strdup(""));
 }
 
-void ft_exit()
-{
-    write(1, "\n", 1);
-}
-
-void ft_add_arg(int *j, char **content, t_command *command)
+static void ft_add_arg(int *j, char **content, t_command *command)
 {
     (*content)[*j] = '\0';
     *j = 0;
@@ -125,23 +92,12 @@ void ft_add_arg(int *j, char **content, t_command *command)
         command->filename = *content;
     }
 }
-int print_name()
-{
-    write(1, "\e[1;34mminishell\e[0m$> ", 23);
-    return (0);
-}
 
-void putnlandname()
-{
-    write(1, "\n", 1);
-    print_name();
-}
-
-void putnl()
+static void putnl()
 {
 }
 
-int ft_if_env(int *j, char *content, char *line, t_shell *shell)
+static int ft_if_env(int *j, char *content, char *line, t_shell *shell)
 {
     int i;
     i = 0;
@@ -149,7 +105,7 @@ int ft_if_env(int *j, char *content, char *line, t_shell *shell)
     {
         i++;
         char *tmp;
-        tmp = ft_search_env(&i, line, ft_toarray(shell->env));
+        tmp = ft_search_env(&i, line, ft_toarray(shell->env->list));
         while (tmp[0])
         {
             content[*j] = tmp[0];
@@ -160,7 +116,7 @@ int ft_if_env(int *j, char *content, char *line, t_shell *shell)
     return (i);
 }
 
-int ft_if_double_quotes(int *j, char *content, char *line, t_shell *shell)
+static int ft_if_double_quotes(int *j, char *content, char *line, t_shell *shell)
 {
     int i;
     i = 0;
@@ -191,7 +147,7 @@ int ft_if_double_quotes(int *j, char *content, char *line, t_shell *shell)
     return (i);
 }
 
-int ft_if_single_quotes(int *j, char *content, char *line, t_shell *shell)
+static int ft_if_single_quotes(int *j, char *content, char *line, t_shell *shell)
 {
     int i;
     i = 0;
@@ -219,45 +175,47 @@ int ft_if_single_quotes(int *j, char *content, char *line, t_shell *shell)
     return (i);
 }
 
-int if_next_command(int *i, char *line, t_command *command, t_shell *shell)
+static int if_next_command(int *i, char *line, t_command **command, t_shell *shell)
 {
     if (line[*i] == ';' || line[*i] == '\0')
     {
         int pid;
         int status;
-        execute(shell, *command);
+        (*command)->execute(*command);
         while ((pid = wait(&status)) > 0)
             ;
-        *command = (t_command){0, 1, NULL, 0, 0, {0, 0}};
+        (*command)->destroy(*command);
+        *command = new_command(shell, 0, 1);
         (*i)++;
         return (1);
     }
     return (0);
 }
 
-int ft_if_pipe(int *i, char *line, t_command *command, t_shell *shell)
+static int ft_if_pipe(int *i, char *line, t_command **command, t_shell *shell)
 {
     if (line[*i] == '|')
     {
         int fd_p[2];
         pipe(fd_p);
-        if (command->type == DEFAULT)
-            command->output = fd_p[1];
-        command->type = command->type | PIPE;
-        if (command->type == REDPIPE)
+        if ((*command)->type == DEFAULT)
+            (*command)->output = fd_p[1];
+        (*command)->type = (*command)->type | PIPE;
+        if ((*command)->type == REDPIPE)
         {
-            int fd = open((command->filename), O_RDONLY, 0666);
+            int fd = open(((*command)->filename), O_RDONLY, 0666);
             dup2(fd, fd_p[0]);
         }
-        execute(shell, *command);
-        *command = (t_command){fd_p[0], 1, NULL, 0, 0, {0, 0}};
+        (*command)->execute((*command));
+        (*command)->destroy(*command);
+        *command = new_command(shell, fd_p[0], 1);
         (*i)++;
         return (1);
     }
     return (0);
 }
 
-int ft_if_redirect(int *i, char *line, t_command *command)
+static int ft_if_redirect(int *i, char *line, t_command *command)
 {
     if (line[*i] == '>')
     {
@@ -284,17 +242,17 @@ int ft_parsing(t_shell *shell, char *line)
     content = (char *)malloc(sizeof(char) * (PATH_MAX + 1));
     i = 0;
     j = 0;
-    t_command command = (t_command){0, 1, NULL, 0, 0, {0, 0}};
+    t_command *command = new_command(shell, 0, 1);
     signal(SIGINT, putnl);
     while (!i || line[i - 1])
     {
         if ((line[i] == ' ' || line[i] == '\0' || line[i] == ';' || line[i] == '|' || line[i] == '>' || line[i] == '<') && (j > 0))
-            ft_add_arg(&j, &content, &command);
+            ft_add_arg(&j, &content, command);
         if (if_next_command(&i, line, &command, shell))
             continue;
         if (ft_if_pipe(&i, line, &command, shell))
             continue;
-        if (ft_if_redirect(&i, line, &command))
+        if (ft_if_redirect(&i, line, command))
             continue;
         if (line[i] == ' ')
         {
@@ -314,107 +272,4 @@ int ft_parsing(t_shell *shell, char *line)
         }
     }
     return (0);
-}
-
-char *ft_getenv(t_shell *shell, char *name)
-{
-    t_list *item;
-
-    item = shell->env;
-    while (item)
-    {
-        if (ft_strncmp(item->content, name, ft_strlen(name)) == 0)
-            return (item->content + ft_strlen(name) + 1);
-        item = item->next;
-    }
-    return (NULL);
-}
-
-int start(t_shell *shell)
-{
-    char *line;
-    line = (char *)malloc(sizeof(char) * (BUFFER_SIZE + 1));
-
-    while (1)
-    {
-        signal(SIGINT, putnlandname);
-        print_name();
-        int r = get_next_line(0, &line);
-        if (!ft_strlen(line) && r > 0)
-            continue;
-        if (!ft_strncmp(line, "exit", 4) || r <= 0)
-        {
-            write(1, "exit\n", 5);
-            break;
-        }
-        ft_parsing(shell, line);
-    }
-    free(line);
-    return (0);
-}
-
-char *ft_add_env(t_shell *shell, char *env)
-{
-    t_list *item;
-    int namelen;
-
-    namelen = ft_strchr(env, '=') - env;
-    item = shell->env;
-    while (item)
-    {
-        if (ft_strncmp(item->content, env, namelen) == 0 && *(char *)(item->content + namelen) == '=')
-        {
-            free(item->content);
-            if (!(item->content = ft_strdup(env)))
-                return NULL;
-            return (item->content + namelen + 1);
-        }
-        item = item->next;
-    }
-    item = ft_lstnew(ft_strdup(env));
-    ft_lstadd_back(&(shell->env), item);
-    return (item->content + namelen + 1);
-}
-
-void ft_del_env(t_shell *shell, char *name)
-{
-    t_list *item;
-    t_list *prev;
-    int namelen;
-
-    namelen = ft_strlen(name);
-    item = shell->env;
-    prev = NULL;
-    while (item)
-    {
-        if (ft_strncmp(item->content, name, namelen) == 0 && *(char *)(item->content + namelen) == '=')
-        {
-            if (prev)
-                prev->next = item->next;
-            else
-                shell->env = item->next;
-            ft_lstdelone(item, free);
-            item = NULL;
-            return;
-        }
-        prev = item;
-        item = item->next;
-    }
-}
-
-t_shell *newShell(char **env)
-{
-    t_shell *shell;
-
-    if (!(shell = malloc(sizeof(t_shell))))
-        return (NULL);
-    if (!(shell->env = ft_tolist(env)))
-        return (NULL);
-    shell->in = dup(0);
-    shell->out = dup(1);
-    shell->start = start;
-    shell->get_env = ft_getenv;
-    shell->add_env = ft_add_env;
-    shell->del_env = ft_del_env;
-    return shell;
 }

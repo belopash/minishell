@@ -1,20 +1,29 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_unset.c                                         :+:      :+:    :+:   */
+/*   t_env.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: bbrock <bbrock@student.21-school.ru>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2021/01/14 19:16:49 by bbrock            #+#    #+#             */
-/*   Updated: 2021/01/15 14:51:06 by bbrock           ###   ########.fr       */
+/*   Created: 2021/01/15 14:21:03 by bbrock            #+#    #+#             */
+/*   Updated: 2021/01/15 14:47:30 by bbrock           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../includes/libft.h"
-#include "../includes/t_shell.h"
+#ifndef T_ENV_H
+#define T_ENV_H
 
-int ft_unset(t_shell *shell, char **args)
+#include "libft.h"
+
+typedef struct s_env
 {
-    shell->env->del(shell->env, args[1]);
-    return (0);
-}
+    t_list *list;
+    char *(*get)(struct s_env *, char *);
+	char *(*add)(struct s_env *, char *);
+	void (*del)(struct s_env *, char *);
+	void (*destroy)(struct s_env *);
+} t_env;
+
+t_env *new_env(char **envs);
+
+#endif
