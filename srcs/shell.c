@@ -6,7 +6,7 @@
 /*   By: bbrock <bbrock@student.21-school.ru>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/11 19:05:21 by bbrock            #+#    #+#             */
-/*   Updated: 2021/01/15 20:57:29 by bbrock           ###   ########.fr       */
+/*   Updated: 2021/01/18 20:42:57 by bbrock           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,8 +23,8 @@
 #include <fcntl.h>
 #include "../includes/t_command.h"
 #include "../includes/t_shell.h"
-#include "../includes/t_buildin.h"
-#include "../includes/buildins.h"
+#include "../includes/t_builtin.h"
+#include "../includes/t_builtin.h"
 #include "../includes/minishell.h"
 #include "../includes/libft.h"
 #include "../includes/utils.h"
@@ -85,27 +85,24 @@ static void destroy(t_shell *shell)
     free(shell);
 }
 
-static int constructor(t_shell *shell, char **env)
+static void constructor(t_shell *shell, char **env, t_builtin *builtins)
 {
     shell->destroy = destroy;
     shell->in = dup(0);
     shell->out = dup(1);
     shell->start = start;
     if (!(shell->env = new_env(env)))
-        return (-1);
-    return (0);
+        exit(-1);
+    if (!(shell->builtins = new_builtin_manager(shell, builtins)))
+        exit(-1);
 }
 
-t_shell *new_shell(char **env)
+t_shell *new_shell(char **env, t_builtin *builtins)
 {
     t_shell *shell;
 
     if (!(shell = malloc(sizeof(t_shell))))
-        return (NULL);
-    if (constructor(shell, env) < 0)
-    {
-        destroy(shell);
-        return NULL;
-    }
+        exit(-1);
+    constructor(shell, env, builtins);
     return shell;
 }

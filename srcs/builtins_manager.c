@@ -1,0 +1,65 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   builtins_manager.c                                 :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: bbrock <bbrock@student.21-school.ru>       +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2021/01/07 19:20:44 by bbrock            #+#    #+#             */
+/*   Updated: 2021/01/18 21:11:16 by bbrock           ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
+#include "../includes/t_builtin.h"
+#include <unistd.h>
+#include "../includes/libft.h"
+
+static t_builtin *get(t_builtins_manager *builtins_manager, char *name)
+{
+    t_list *item;
+
+    item = builtins_manager->list;
+    while (item)
+    {
+        if (ft_strncmp(((t_builtin *)item->content)->name, name, ft_strlen(name)) == 0)
+            return (item->content);
+        item = item->next;
+    }
+    return (NULL);
+}
+
+static void destroy(t_builtins_manager *builtins_manager)
+{
+	if (!builtins_manager)
+		return;
+	ft_bzero(builtins_manager, sizeof(t_builtins_manager));
+	free(builtins_manager);
+}
+
+static void constructor(t_builtins_manager *builtins_manager, t_shell *shell, t_builtin *builtins)
+{
+	int i;
+	t_list *t;
+
+	i = 0;
+	builtins_manager->shell = shell;
+	builtins_manager->list = NULL;
+	while (builtins[i].name)
+	{
+		if (!(t = ft_lstnew(new_builtin(shell, builtins[i].name, builtins[i].command))))
+			exit(-1);
+		ft_lstadd_back(&(builtins_manager->list), t);
+		i++;
+	}
+	builtins_manager->get = get;
+}
+
+t_builtins_manager *new_builtin_manager(t_shell *shell, t_builtin *builtins)
+{
+	t_builtins_manager *builtins_manger;
+
+	if (!(builtins_manger = malloc(sizeof(t_builtins_manager))))
+		exit(-1);
+	constructor(builtins_manger, shell, builtins);
+	return builtins_manger;
+}

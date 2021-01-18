@@ -6,7 +6,7 @@
 /*   By: bbrock <bbrock@student.21-school.ru>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/11 18:16:09 by bbrock            #+#    #+#             */
-/*   Updated: 2021/01/18 12:52:51 by bbrock           ###   ########.fr       */
+/*   Updated: 2021/01/18 21:08:05 by bbrock           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 #include <unistd.h>
 #include "../includes/t_command.h"
 #include <sys/types.h>
-#include "../includes/t_buildin.h"
+#include "../includes/t_builtin.h"
 #include "../includes/utils.h"
 #include "../includes/libft.h"
 #include "../includes/t_shell.h"
@@ -23,6 +23,7 @@ int execute(t_command *command)
 {
     int ret;
     struct stat sb;
+    t_builtin *bi;
 
     char **args = ft_toarray(command->list);
 
@@ -36,21 +37,18 @@ int execute(t_command *command)
         dup2(command->output, 1);
         close(command->output);
     }
-    if (find_buildin(args[0]))
+    bi = command->shell->builtins->get(command->shell->builtins, args[0]);
+    if (bi)
     {
         if (command->type & PIPE == PIPE)
         {
             if (!fork())
-                exit(execbi(command->shell, args));
+                exit(bi->command(bi, args));
         }
         else
         {
-            execbi(command->shell, args);
+            bi->command(bi, args);
         }
-        if (command->input != 0)
-            dup2(command->shell->in, 0);
-        if (command->input != 1)
-            dup2(command->shell->out, 1);
     }
     else
     {
@@ -71,6 +69,10 @@ int execute(t_command *command)
         }
     }
     free(args);
+    if (command->input != 0)
+        dup2(command->shell->in, 0);
+    if (command->input != 1)
+        dup2(command->shell->out, 1);
     return (0);
 }
 
@@ -101,11 +103,8 @@ t_command *new_command(t_shell *shell, int input, int output)
     t_command *command;
 
     if (!(command = malloc(sizeof(t_command))))
-        return (NULL);
+        exit(-1);
     if (constructor(command, shell, input, output) < 0)
-    {
-        destroy(command);
-        return (NULL);
-    }
+        exit(-1);
     return command;
 }

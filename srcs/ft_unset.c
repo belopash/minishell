@@ -6,15 +6,15 @@
 /*   By: bbrock <bbrock@student.21-school.ru>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/14 19:16:49 by bbrock            #+#    #+#             */
-/*   Updated: 2021/01/15 14:51:06 by bbrock           ###   ########.fr       */
+/*   Updated: 2021/01/18 20:55:03 by bbrock           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/libft.h"
 #include "../includes/t_shell.h"
 
-int ft_unset(t_shell *shell, char **args)
+int ft_unset(t_builtin *builtin, char **args)
 {
-    shell->env->del(shell->env, args[1]);
+    builtin->shell->env->del(builtin->shell->env, args[1]);
     return (0);
 }

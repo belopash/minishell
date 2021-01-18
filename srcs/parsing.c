@@ -11,11 +11,15 @@
 #include <fcntl.h>
 #include "../includes/t_command.h"
 #include "../includes/t_shell.h"
-#include "../includes/t_buildin.h"
-#include "../includes/buildins.h"
+#include "../includes/t_builtin.h"
+#include "../includes/builtins.h"
 #include "../includes/minishell.h"
 #include "../includes/libft.h"
 #include "../includes/utils.h"
+#include <limits.h>
+#ifndef PATH_MAX
+#include <linux/limits.h>
+#endif
 
 static void ft_lst_print(t_list *list)
 {

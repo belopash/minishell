@@ -6,7 +6,7 @@
 /*   By: bbrock <bbrock@student.21-school.ru>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/05 15:42:15 by bbrock            #+#    #+#             */
-/*   Updated: 2021/01/15 14:46:43 by bbrock           ###   ########.fr       */
+/*   Updated: 2021/01/18 20:46:16 by bbrock           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 #define T_COMMAND_H
 
 #include "./libft.h"
-#include "t_shell.h"
+#include "./t_shell.h"
 
 #define DEFAULT 0
 #define PIPE 01

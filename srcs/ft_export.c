@@ -6,18 +6,18 @@
 /*   By: bbrock <bbrock@student.21-school.ru>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/14 19:16:49 by bbrock            #+#    #+#             */
-/*   Updated: 2021/01/18 11:59:44 by bbrock           ###   ########.fr       */
+/*   Updated: 2021/01/18 20:54:17 by bbrock           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/libft.h"
 #include "../includes/t_shell.h"
 
-int ft_export(t_shell *shell, char **args)
+int ft_export(t_builtin *builtin, char **args)
 {
     if (!ft_strchr(args[1], '='))
         return (-1);
-    if (!shell->env->add(shell->env, args[1]))
+    if (!builtin->shell->env->add(builtin->shell->env, args[1]))
         return (-1);
     return (0);
 }
