@@ -6,7 +6,7 @@
 /*   By: bbrock <bbrock@student.21-school.ru>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/07 19:20:44 by bbrock            #+#    #+#             */
-/*   Updated: 2021/01/18 12:09:50 by bbrock           ###   ########.fr       */
+/*   Updated: 2021/01/18 12:23:00 by bbrock           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,5 +43,5 @@ int execbi(t_shell *shell, char **args)
 	if (!(buildin = find_buildin(args[0])))
 		return -1;
 
-	exit(buildin->command(shell, args));
+	return(buildin->command(shell, args));
 }

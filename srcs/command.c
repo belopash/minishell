@@ -6,7 +6,7 @@
 /*   By: bbrock <bbrock@student.21-school.ru>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/11 18:16:09 by bbrock            #+#    #+#             */
-/*   Updated: 2021/01/18 12:08:48 by bbrock           ###   ########.fr       */
+/*   Updated: 2021/01/18 12:26:14 by bbrock           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,19 +26,27 @@ int execute(t_command *command)
 
     char **args = ft_toarray(command->list);
 
-    if (!fork())
+    if (command->input != 0)
     {
+        dup2(command->input, 0);
+        close(command->input);
+    }
+    if (command->output != 1)
+    {
+        dup2(command->output, 1);
+        close(command->output);
+    }
+    if (find_buildin(args[0]))
+    {
+        execbi(command->shell, args);
         if (command->input != 0)
-        {
-            dup2(command->input, 0);
-            close(command->input);
-        }
-        if (command->output != 1)
-        {
-            dup2(command->output, 1);
-            close(command->output);
-        }
-        if (!(find_buildin(args[0])))
+            dup2(command->shell->in, 0);
+        if (command->input != 1)
+            dup2(command->shell->out, 1);
+    }
+    else
+    {
+        if (!fork())
         {
             char **paths = ft_split(command->shell->env->get(command->shell->env, "PATH"), ':');
             int i = 0;
@@ -52,10 +60,6 @@ int execute(t_command *command)
                 i++;
             }
             return execve(path, args, ft_toarray(command->shell->env->list));
-        }
-        else
-        {
-            return execbi(command->shell, args);
         }
     }
     free(args);
