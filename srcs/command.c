@@ -6,7 +6,7 @@
 /*   By: bbrock <bbrock@student.21-school.ru>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/11 18:16:09 by bbrock            #+#    #+#             */
-/*   Updated: 2021/01/18 12:26:14 by bbrock           ###   ########.fr       */
+/*   Updated: 2021/01/18 12:52:51 by bbrock           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,15 @@ int execute(t_command *command)
     }
     if (find_buildin(args[0]))
     {
-        execbi(command->shell, args);
+        if (command->type & PIPE == PIPE)
+        {
+            if (!fork())
+                exit(execbi(command->shell, args));
+        }
+        else
+        {
+            execbi(command->shell, args);
+        }
         if (command->input != 0)
             dup2(command->shell->in, 0);
         if (command->input != 1)

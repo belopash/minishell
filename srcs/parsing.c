@@ -214,6 +214,7 @@ static int ft_if_pipe(int *i, char *line, t_command **command, t_shell *shell)
         (*command)->execute((*command));
         (*command)->destroy(*command);
         *command = new_command(shell, fd_p[0], 1);
+        (*command)->type = (*command)->type | PIPE;
         (*i)++;
         return (1);
     }
