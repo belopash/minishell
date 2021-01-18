@@ -6,7 +6,7 @@
 /*   By: bbrock <bbrock@student.21-school.ru>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/07 19:20:44 by bbrock            #+#    #+#             */
-/*   Updated: 2021/01/18 21:00:32 by bbrock           ###   ########.fr       */
+/*   Updated: 2021/01/18 21:17:51 by bbrock           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,7 @@ static void constructor(t_builtin *builtin, t_shell *shell, char *name, int (*co
 	builtin->shell = shell;
 	builtin->name = name;
 	builtin->command = command;
+	builtin->destroy = destroy;
 }
 
 t_builtin *new_builtin(t_shell *shell, char *name, int (*command)(t_builtin *builtin, char **argv))

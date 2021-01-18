@@ -6,7 +6,7 @@
 /*   By: bbrock <bbrock@student.21-school.ru>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/07 19:20:44 by bbrock            #+#    #+#             */
-/*   Updated: 2021/01/18 21:11:16 by bbrock           ###   ########.fr       */
+/*   Updated: 2021/01/18 21:17:36 by bbrock           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,6 +52,7 @@ static void constructor(t_builtins_manager *builtins_manager, t_shell *shell, t_
 		i++;
 	}
 	builtins_manager->get = get;
+	builtins_manager->destroy = destroy;
 }
 
 t_builtins_manager *new_builtin_manager(t_shell *shell, t_builtin *builtins)
