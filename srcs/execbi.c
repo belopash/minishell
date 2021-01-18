@@ -6,7 +6,7 @@
 /*   By: bbrock <bbrock@student.21-school.ru>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/07 19:20:44 by bbrock            #+#    #+#             */
-/*   Updated: 2021/01/14 19:54:37 by bbrock           ###   ########.fr       */
+/*   Updated: 2021/01/18 12:09:50 by bbrock           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 #include <unistd.h>
 #include "../includes/libft.h"
 
-static t_buildin *find_buildin(char *name)
+t_buildin *find_buildin(char *name)
 {
 	static t_buildin buildins[] = {
 		(t_buildin){"echo", ft_echo},
@@ -43,5 +43,5 @@ int execbi(t_shell *shell, char **args)
 	if (!(buildin = find_buildin(args[0])))
 		return -1;
 
-	return buildin->command(shell, args);
+	exit(buildin->command(shell, args));
 }

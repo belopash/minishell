@@ -6,7 +6,7 @@
 /*   By: bbrock <bbrock@student.21-school.ru>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/11 18:16:09 by bbrock            #+#    #+#             */
-/*   Updated: 2021/01/18 11:42:31 by bbrock           ###   ########.fr       */
+/*   Updated: 2021/01/18 12:08:48 by bbrock           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 #include <unistd.h>
 #include "../includes/t_command.h"
 #include <sys/types.h>
-#include "../includes/buildins.h"
+#include "../includes/t_buildin.h"
 #include "../includes/utils.h"
 #include "../includes/libft.h"
 #include "../includes/t_shell.h"
@@ -25,18 +25,20 @@ int execute(t_command *command)
     struct stat sb;
 
     char **args = ft_toarray(command->list);
-    if (command->input != 0)
+
+    if (!fork())
     {
-        dup2(command->input, 0);
-        close(command->input);
-    }
-    if (command->output != 1)
-    {
-        dup2(command->output, 1);
-        close(command->output);
-    }
-    if (execbi(command->shell, args) < 0)
-        if (!fork())
+        if (command->input != 0)
+        {
+            dup2(command->input, 0);
+            close(command->input);
+        }
+        if (command->output != 1)
+        {
+            dup2(command->output, 1);
+            close(command->output);
+        }
+        if (!(find_buildin(args[0])))
         {
             char **paths = ft_split(command->shell->env->get(command->shell->env, "PATH"), ':');
             int i = 0;
@@ -51,11 +53,13 @@ int execute(t_command *command)
             }
             return execve(path, args, ft_toarray(command->shell->env->list));
         }
-    if (command->input != 0)
-        dup2(command->shell->in, 0);
-    if (command->output != 1)
-        dup2(command->shell->out, 1);
+        else
+        {
+            return execbi(command->shell, args);
+        }
+    }
     free(args);
+    return (0);
 }
 
 static void destroy(t_command *command)

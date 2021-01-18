@@ -6,7 +6,7 @@
 /*   By: bbrock <bbrock@student.21-school.ru>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/07 19:18:01 by bbrock            #+#    #+#             */
-/*   Updated: 2021/01/11 19:41:55 by bbrock           ###   ########.fr       */
+/*   Updated: 2021/01/18 12:01:41 by bbrock           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,5 +22,6 @@ typedef struct s_buildin
 } t_buildin;
 
 int execbi(t_shell *shell, char **args);
+t_buildin *find_buildin(char *name);
 
 #endif

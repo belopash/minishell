@@ -6,7 +6,7 @@
 /*   By: bbrock <bbrock@student.21-school.ru>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/14 19:16:49 by bbrock            #+#    #+#             */
-/*   Updated: 2021/01/15 14:51:04 by bbrock           ###   ########.fr       */
+/*   Updated: 2021/01/18 11:59:44 by bbrock           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,4 +19,5 @@ int ft_export(t_shell *shell, char **args)
         return (-1);
     if (!shell->env->add(shell->env, args[1]))
         return (-1);
+    return (0);
 }
