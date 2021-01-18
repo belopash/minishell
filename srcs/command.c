@@ -6,7 +6,7 @@
 /*   By: bbrock <bbrock@student.21-school.ru>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/11 18:16:09 by bbrock            #+#    #+#             */
-/*   Updated: 2021/01/15 15:19:59 by bbrock           ###   ########.fr       */
+/*   Updated: 2021/01/18 11:42:31 by bbrock           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,12 +25,16 @@ int execute(t_command *command)
     struct stat sb;
 
     char **args = ft_toarray(command->list);
-    dup2(command->input, 0);
-    dup2(command->output, 1);
     if (command->input != 0)
+    {
+        dup2(command->input, 0);
         close(command->input);
+    }
     if (command->output != 1)
+    {
+        dup2(command->output, 1);
         close(command->output);
+    }
     if (execbi(command->shell, args) < 0)
         if (!fork())
         {
@@ -48,11 +52,9 @@ int execute(t_command *command)
             return execve(path, args, ft_toarray(command->shell->env->list));
         }
     if (command->input != 0)
-        close(command->input);
+        dup2(command->shell->in, 0);
     if (command->output != 1)
-        close(command->output);
-    dup2(command->shell->in, 0);
-    dup2(command->shell->out, 1);
+        dup2(command->shell->out, 1);
     free(args);
 }
 

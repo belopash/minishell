@@ -186,7 +186,6 @@ static int if_next_command(int *i, char *line, t_command **command, t_shell *she
             ;
         if (WIFSIGNALED(status))
         {
-            kill(0, WTERMSIG(status));
             if (WTERMSIG(status) == SIGINT)
                 write(1, "\n", 1);
         }
