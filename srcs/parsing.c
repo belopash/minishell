@@ -105,11 +105,18 @@ static int ft_if_env(int *j, char *content, char *line, t_shell *shell)
 {
     int i;
     i = 0;
-    if (line[i] == '$' && line[i + 1] != '\\' && line[i + 1] != ' ' && line[i + 1] != '\'' && line[i + 1] != '"' && line[i + 1] != '\0')
+
+    if (line[i] == '$' && ((line[i + 1] != '\\' && line[i + 1] != ' ' && line[i + 1] != '\'' && line[i + 1] != '"' && line[i + 1] != '\0') || line[i + 1] == '?'))
     {
         i++;
         char *tmp;
-        tmp = ft_search_env(&i, line, ft_toarray(shell->env->list));
+        if (line[i] == '?')
+        {
+            i++;
+            tmp = ft_strdup(ft_itoa(shell->code));
+        }
+        else
+            tmp = ft_search_env(&i, line, ft_toarray(shell->env->list));
         while (tmp[0])
         {
             content[*j] = tmp[0];
@@ -132,7 +139,7 @@ static int ft_if_double_quotes(int *j, char *content, char *line, t_shell *shell
             i += ft_if_env(j, content, line + i, shell);
             if (line[i] == '\\' && (line[i + 1] == '\\' || line[i + 1] == '\'' || line[i + 1] == '"' || line[i + 1] == '$'))
                 i++;
-            while (line[i] != '\0' && line[i] != '\'' && line[i] != '"' && line[i] != '$')
+            while (line[i] != '\0' && line[i] != '"' && line[i] != '$')
             {
                 if (line[i] == '\\' && (line[i + 1] == 'n'))
                 {
@@ -254,7 +261,9 @@ int ft_parsing(t_shell *shell, char *line)
     j = 0;
     t_command *command = new_command(shell, 0, 1);
     signal(SIGINT, putnl);
-    while ((!i && line[i]) || line[i - 1])
+     if (line[0] == '\0')
+        return(0);
+    while (!i || line[i-1])
     {
         if ((line[i] == ' ' || line[i] == '\0' || line[i] == ';' || line[i] == '|' || line[i] == '>' || line[i] == '<') && (j > 0))
             ft_add_arg(&j, &content, command);
@@ -269,12 +278,16 @@ int ft_parsing(t_shell *shell, char *line)
             i++;
             continue;
         }
-        i += ft_if_env(&j, content, line + i, shell);
-        i += ft_if_double_quotes(&j, content, line + i, shell);
-        i += ft_if_single_quotes(&j, content, line + i, shell);
+        
+        if (i < (i = i + ft_if_env(&j, content, line + i, shell)))
+            continue;
+        if (i < (i = i + ft_if_double_quotes(&j, content, line + i, shell)))
+            continue;
+        if (i < (i = i + ft_if_single_quotes(&j, content, line + i, shell)))
+            continue;
         if (line[i] == '\\')
             i++;
-        while (line[i] != ' ' && line[i] != '\0' && line[i] != '\'' && line[i] != '"' && line[i] != '$' && line[i] != ';')
+        while (line[i] != ' ' && line[i] != '\0' && line[i] != '\'' && line[i] != '"' && line[i] != '$' && line[i] != ';' && line[i] != '|' && line[i] != '>' && line[i] != '<')
         {
             content[j] = line[i];
             j++;

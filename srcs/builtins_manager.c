@@ -6,7 +6,7 @@
 /*   By: bbrock <bbrock@student.21-school.ru>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/07 19:20:44 by bbrock            #+#    #+#             */
-/*   Updated: 2021/01/18 21:17:36 by bbrock           ###   ########.fr       */
+/*   Updated: 2021/01/20 15:40:58 by bbrock           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ static t_builtin *get(t_builtins_manager *builtins_manager, char *name)
     item = builtins_manager->list;
     while (item)
     {
-        if (ft_strncmp(((t_builtin *)item->content)->name, name, ft_strlen(name)) == 0)
+        if (ft_strncmp(((t_builtin *)item->content)->name, name, ft_strlen(((t_builtin *)item->content)->name) + 1) == 0)
             return (item->content);
         item = item->next;
     }

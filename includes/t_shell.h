@@ -6,7 +6,7 @@
 /*   By: bbrock <bbrock@student.21-school.ru>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/05 15:42:15 by bbrock            #+#    #+#             */
-/*   Updated: 2021/01/18 20:49:25 by bbrock           ###   ########.fr       */
+/*   Updated: 2021/01/20 15:40:32 by bbrock           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,7 @@ typedef struct s_shell
 	t_builtins_manager *builtins;
 	int (*start)(struct s_shell *);
 	void (*destroy)(struct s_shell *);
+    int code;
 } t_shell;
 
 t_shell *new_shell(char **env, t_builtin *builtins);

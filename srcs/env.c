@@ -6,7 +6,7 @@
 /*   By: bbrock <bbrock@student.21-school.ru>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/15 14:26:12 by bbrock            #+#    #+#             */
-/*   Updated: 2021/01/15 14:50:04 by bbrock           ###   ########.fr       */
+/*   Updated: 2021/01/20 15:41:29 by bbrock           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -95,4 +95,5 @@ t_env *new_env(char **envs)
     env->add = add;
     env->get = get;
     env->destroy = destroy;
+    return(env);
 }

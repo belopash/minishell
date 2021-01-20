@@ -6,7 +6,7 @@
 /*   By: bbrock <bbrock@student.21-school.ru>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/11 19:05:21 by bbrock            #+#    #+#             */
-/*   Updated: 2021/01/18 20:42:57 by bbrock           ###   ########.fr       */
+/*   Updated: 2021/01/20 15:42:10 by bbrock           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,6 +91,7 @@ static void constructor(t_shell *shell, char **env, t_builtin *builtins)
     shell->in = dup(0);
     shell->out = dup(1);
     shell->start = start;
+    shell->code = 0;
     if (!(shell->env = new_env(env)))
         exit(-1);
     if (!(shell->builtins = new_builtin_manager(shell, builtins)))

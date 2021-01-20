@@ -35,12 +35,14 @@ int ft_echo(t_builtin *builtin, char **args)
 	bool nonewline;
 
 	i = 1;
+    nonewline = 0;
 	while (args[i] && args[i][0] == '-')
 	{
 		if (ft_isflags(args[i], "n"))
 			nonewline = nonewline | true;
 		i++;
 	}
+
 	while (args[i])
 	{
 		write(1, args[i], ft_strlen(args[i]));

@@ -6,7 +6,7 @@
 /*   By: bbrock <bbrock@student.21-school.ru>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/11 18:16:09 by bbrock            #+#    #+#             */
-/*   Updated: 2021/01/18 21:08:05 by bbrock           ###   ########.fr       */
+/*   Updated: 2021/01/20 15:41:16 by bbrock           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,7 @@ int execute(t_command *command)
     bi = command->shell->builtins->get(command->shell->builtins, args[0]);
     if (bi)
     {
-        if (command->type & PIPE == PIPE)
+        if ((command->type & PIPE) == PIPE)
         {
             if (!fork())
                 exit(bi->command(bi, args));
