@@ -1,20 +1,29 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   minishell.h                                        :+:      :+:    :+:   */
+/*   t_env.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: bbrock <bbrock@student.21-school.ru>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2021/01/11 18:19:12 by bbrock            #+#    #+#             */
-/*   Updated: 2021/01/15 14:02:23 by bbrock           ###   ########.fr       */
+/*   Created: 2021/01/15 14:21:03 by bbrock            #+#    #+#             */
+/*   Updated: 2021/01/15 14:47:30 by bbrock           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef MINISHELL_H
-#define MINISHELL_H
+#ifndef T_ENV_H
+#define T_ENV_H
 
-#include "t_command.h"
-#include "t_shell.h"
-int ft_parsing(t_shell *shell, char *line);
+#include "libft.h"
+
+typedef struct s_env
+{
+    t_list *list;
+    char *(*get)(struct s_env *, char *);
+	char *(*add)(struct s_env *, char *);
+	void (*del)(struct s_env *, char *);
+	void (*destroy)(struct s_env *);
+} t_env;
+
+t_env *new_env(char **envs);
 
 #endif

@@ -1,20 +1,20 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   minishell.h                                        :+:      :+:    :+:   */
+/*   ft_unset.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: bbrock <bbrock@student.21-school.ru>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2021/01/11 18:19:12 by bbrock            #+#    #+#             */
-/*   Updated: 2021/01/15 14:02:23 by bbrock           ###   ########.fr       */
+/*   Created: 2021/01/14 19:16:49 by bbrock            #+#    #+#             */
+/*   Updated: 2021/01/18 20:55:03 by bbrock           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef MINISHELL_H
-#define MINISHELL_H
+#include "../includes/libft.h"
+#include "../includes/t_shell.h"
 
-#include "t_command.h"
-#include "t_shell.h"
-int ft_parsing(t_shell *shell, char *line);
-
-#endif
+int ft_unset(t_builtin *builtin, char **args)
+{
+    builtin->shell->env->del(builtin->shell->env, args[1]);
+    return (0);
+}

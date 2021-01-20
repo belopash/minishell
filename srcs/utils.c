@@ -6,13 +6,11 @@
 /*   By: bbrock <bbrock@student.21-school.ru>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/11 18:18:42 by bbrock            #+#    #+#             */
-/*   Updated: 2021/01/12 12:18:01 by bbrock           ###   ########.fr       */
+/*   Updated: 2021/01/14 19:26:04 by bbrock           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
-
-
 
 char *ft_pathjoin(char *path1, char *path2)
 {
