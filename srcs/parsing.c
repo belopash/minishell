@@ -188,6 +188,8 @@ static int ft_if_single_quotes(int *j, char *content, char *line, t_shell *shell
 
 static int if_next_command(int *i, char *line, t_command **command, t_shell *shell)
 {
+    int exit = 0;
+
     if (line[*i] == ';' || line[*i] == '\0')
     {
         int pid;
@@ -200,12 +202,15 @@ static int if_next_command(int *i, char *line, t_command **command, t_shell *she
                 if ((shell->code = WEXITSTATUS(status)) != 0)
                 {
                     kill(0, SIGQUIT);
+                    exit = 1;
                 }
             }
             else if (WIFSIGNALED(status))
             {
-                write(1, "\n", 1);
+                if (!exit)
+                    write(1, "\n", 1);
                 kill(0, SIGQUIT);
+                exit = 1;
             }
         }
         (*command)->destroy(*command);
