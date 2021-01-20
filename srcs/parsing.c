@@ -21,26 +21,6 @@
 #include <linux/limits.h>
 #endif
 
-static void ft_lst_print(t_list *list)
-{
-    while (list)
-    {
-        ft_putendl_fd(list->content, 1);
-        list = list->next;
-    }
-}
-
-static char *ft_together(t_list *list)
-{
-    char *var = "";
-    while (list)
-    {
-        var = ft_strjoin(var, list->content);
-        var = ft_strjoin(var, " ");
-        list = list->next;
-    }
-    return (var);
-}
 
 static char *ft_search_env(int *i, char *line, char **env)
 {
@@ -134,24 +114,28 @@ static int ft_if_double_quotes(int *j, char *content, char *line, t_shell *shell
     if (line[i] == '"')
     {
         i++;
+        if (line[i] == '"' && (line[i+1] == '\0' || line[i+1] == ' ' || line[i+1] == '>' || line[i+1] == '<' || line[i+1] == ';' || line[i+1] == '|'))
+        {
+            content[*j] = '\0';
+            (*j)++;
+            i++;
+            return(i);
+        }
         while (line[i] != '"' && line[i])
         {
-            i += ft_if_env(j, content, line + i, shell);
-            if (line[i] == '\\' && (line[i + 1] == '\\' || line[i + 1] == '\'' || line[i + 1] == '"' || line[i + 1] == '$'))
+            if (i < (i = i + ft_if_env(j, content, line + i, shell)))
+                continue;
+            if (line[i] == '\\' && (line[i + 1] == '\\' || line[i + 1] == '$' || line[i + 1] == '"'))
                 i++;
-            while (line[i] != '\0' && line[i] != '"' && line[i] != '$')
-            {
-                if (line[i] == '\\' && (line[i + 1] == 'n'))
-                {
-                    content[*j] = '\n';
-                    (*j)++;
-                    i += 2;
-                    continue;
-                }
-                content[*j] = line[i];
-                (*j)++;
-                i++;
-            }
+            content[*j] = line[i];
+            (*j)++;
+            i++;
+        }
+        if (line[i] == '\0')
+        {
+            write(2, "Error: quote not closed\n", 24);
+            (*j) = 0;
+            shell->code = 1;
         }
         i++;
     }
@@ -166,20 +150,24 @@ static int ft_if_single_quotes(int *j, char *content, char *line, t_shell *shell
     if (line[i] == '\'')
     {
         i++;
+        if (line[i] == '\'' && (line[i+1] == '\0' || line[i+1] == ' ' || line[i+1] == '>' || line[i+1] == '<' || line[i+1] == ';' || line[i+1] == '|'))
+        {
+            content[*j] = '\0';
+            (*j)++;
+            i++;
+            return(i);
+        }
         while (line[i] != '\'' && line[i])
         {
-            if (line[i] == '\\' && (line[i + 1] == 'n'))
-            {
-                i += 2;
-                content[*j] = '\n';
-                (*j)++;
-                continue;
-            }
-            if (line[i] == '\\' && (line[i + 1] == '\\'))
-                i++;
             content[*j] = line[i];
             (*j)++;
             i++;
+        }
+        if (line[i] == '\0')
+        {
+            write(2, "Error: quote not closed\n", 24);
+            (*j) = 0;
+            shell->code = 1;
         }
         i++;
     }
@@ -192,6 +180,31 @@ static int if_next_command(int *i, char *line, t_command **command, t_shell *she
 
     if (line[*i] == ';' || line[*i] == '\0')
     {
+        if (line[*i] == ';' && !((*command)->list))
+        {
+            write(2, "Error: syntax error near unexpected token ;\n", 44);
+            shell->code = 1;
+            (*i)++;
+            return (1);
+        }
+        
+        if ((*command)->flags.redir_r > 0)
+        {
+            write(2, "Error: syntax error after unexpected token >\n", 45);
+            shell->code = 1;
+            (*command)->flags.redir_r = 0;
+            return (1);
+        }
+        
+        if ((*command)->flags.redir_l > 0)
+        {
+            write(2, "Error: syntax error after unexpected token <\n", 45);
+            shell->code = 1;
+            (*command)->flags.redir_l = 0;
+            return (1);
+        }
+        
+        
         int pid;
         int status;
         (*command)->execute(*command);
@@ -225,6 +238,14 @@ static int ft_if_pipe(int *i, char *line, t_command **command, t_shell *shell)
 {
     if (line[*i] == '|')
     {
+        if (!((*command)->list))
+        {
+            write(2, "Error: syntax error near unexpected token |\n", 44);
+            shell->code = 1;
+            (*i)++;
+            return (1);
+        }
+        
         int fd_p[2];
         pipe(fd_p);
         if ((*command)->type == DEFAULT)
@@ -245,19 +266,36 @@ static int ft_if_pipe(int *i, char *line, t_command **command, t_shell *shell)
     return (0);
 }
 
-static int ft_if_redirect(int *i, char *line, t_command *command)
+static int ft_if_redirect(int *i, char *line, t_command *command, t_shell *shell)
 {
     if (line[*i] == '>')
     {
-        (command->flags.redir_r)++;
-        command->type = command->type | REDIRECT;
         (*i)++;
+        (command->flags.redir_r)++;
+        if (command->flags.redir_r > 1)
+        {
+            write(2, "Error: syntax error after unexpected token >\n", 45);
+            shell->code = 1;
+            command->flags.redir_r = 1;
+        }
+        if (line[*i] == '>')
+        {
+            (*i)++;
+            (command->flags.redir_r)++;
+        }
+        command->type = command->type | REDIRECT;
         return (1);
     }
     if (line[*i] == '<')
     {
-        command->flags.redir_l = 1;
         (*i)++;
+        command->flags.redir_l++;
+        if (command->flags.redir_l > 1)
+        {
+            write(2, "Error: syntax error after unexpected token <\n", 45);
+            shell->code = 1;
+            command->flags.redir_l = 1;
+        }
         return (1);
     }
     return (0);
@@ -285,7 +323,7 @@ int ft_parsing(t_shell *shell, char *line)
             continue;
         if (ft_if_pipe(&i, line, &command, shell))
             continue;
-        if (ft_if_redirect(&i, line, command))
+        if (ft_if_redirect(&i, line, command, shell))
             continue;
         if (line[i] == ' ')
         {
@@ -299,8 +337,18 @@ int ft_parsing(t_shell *shell, char *line)
             continue;
         if (i < (i = i + ft_if_single_quotes(&j, content, line + i, shell)))
             continue;
+        
         if (line[i] == '\\')
+        {
             i++;
+            if (line[i] == '\'' || line[i] == '"' || line[i] == '$' || line[i] == ';' || line[i] != '|' || line[i] != '>' || line[i] != '<')
+            {
+                content[j] = line[i];
+                j++;
+                i++;
+            }
+            continue;
+        }
         while (line[i] != ' ' && line[i] != '\0' && line[i] != '\'' && line[i] != '"' && line[i] != '$' && line[i] != ';' && line[i] != '|' && line[i] != '>' && line[i] != '<')
         {
             content[j] = line[i];
