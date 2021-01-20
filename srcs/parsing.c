@@ -194,11 +194,19 @@ static int if_next_command(int *i, char *line, t_command **command, t_shell *she
         int status;
         (*command)->execute(*command);
         while ((pid = wait(&status)) > 0)
-            ;
-        if (WIFSIGNALED(status))
         {
-            if (WTERMSIG(status) == SIGINT)
+            if (WIFEXITED(status))
+            {
+                if ((shell->code = WEXITSTATUS(status)) != 0)
+                {
+                    kill(0, SIGQUIT);
+                }
+            }
+            else if (WIFSIGNALED(status))
+            {
                 write(1, "\n", 1);
+                kill(0, SIGQUIT);
+            }
         }
         (*command)->destroy(*command);
         *command = new_command(shell, 0, 1);
@@ -261,9 +269,10 @@ int ft_parsing(t_shell *shell, char *line)
     j = 0;
     t_command *command = new_command(shell, 0, 1);
     signal(SIGINT, putnl);
-     if (line[0] == '\0')
-        return(0);
-    while (!i || line[i-1])
+    signal(SIGQUIT, putnl);
+    if (line[0] == '\0')
+        return (0);
+    while (!i || line[i - 1])
     {
         if ((line[i] == ' ' || line[i] == '\0' || line[i] == ';' || line[i] == '|' || line[i] == '>' || line[i] == '<') && (j > 0))
             ft_add_arg(&j, &content, command);
@@ -278,7 +287,7 @@ int ft_parsing(t_shell *shell, char *line)
             i++;
             continue;
         }
-        
+
         if (i < (i = i + ft_if_env(&j, content, line + i, shell)))
             continue;
         if (i < (i = i + ft_if_double_quotes(&j, content, line + i, shell)))

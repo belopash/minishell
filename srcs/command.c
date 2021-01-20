@@ -6,7 +6,7 @@
 /*   By: bbrock <bbrock@student.21-school.ru>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/11 18:16:09 by bbrock            #+#    #+#             */
-/*   Updated: 2021/01/20 15:41:16 by bbrock           ###   ########.fr       */
+/*   Updated: 2021/01/20 19:27:53 by bbrock           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,9 +24,7 @@ int execute(t_command *command)
     int ret;
     struct stat sb;
     t_builtin *bi;
-
-    char **args = ft_toarray(command->list);
-
+    char **args;
     if (command->input != 0)
     {
         dup2(command->input, 0);
@@ -37,38 +35,41 @@ int execute(t_command *command)
         dup2(command->output, 1);
         close(command->output);
     }
-    bi = command->shell->builtins->get(command->shell->builtins, args[0]);
-    if (bi)
+    if (command->list)
     {
-        if ((command->type & PIPE) == PIPE)
+        args = ft_toarray(command->list);
+        bi = command->shell->builtins->get(command->shell->builtins, args[0]);
+        if (bi)
         {
-            if (!fork())
-                exit(bi->command(bi, args));
+            if ((command->type & PIPE) == PIPE)
+			{
+
+                if (!fork())
+                    exit(bi->command(bi, args));
+			}
+            else
+                command->shell->code = bi->command(bi, args);
         }
         else
         {
-            bi->command(bi, args);
-        }
-    }
-    else
-    {
-        if (!fork())
-        {
-            char **paths = ft_split(command->shell->env->get(command->shell->env, "PATH"), ':');
-            int i = 0;
-
-            char *path = args[0];
-            while (!(stat((const char *)path, &sb) == 0 && (sb.st_mode & (S_IXUSR | S_IXGRP | S_IXOTH))))
+            if (!fork())
             {
-                if (!paths[i])
-                    exit(-1);
-                path = ft_pathjoin(paths[i], args[0]);
-                i++;
+                char **paths = ft_split(command->shell->env->get(command->shell->env, "PATH"), ':');
+                int i = 0;
+
+                char *path = args[0];
+                while (!(stat((const char *)path, &sb) == 0 && (sb.st_mode & (S_IXUSR | S_IXGRP | S_IXOTH))))
+                {
+                    if (!paths[i])
+                        exit(-1);
+                    path = ft_pathjoin(paths[i], args[0]);
+                    i++;
+                }
+                return execve(path, args, ft_toarray(command->shell->env->list));
             }
-            return execve(path, args, ft_toarray(command->shell->env->list));
         }
+        free(args);
     }
-    free(args);
     if (command->input != 0)
         dup2(command->shell->in, 0);
     if (command->input != 1)

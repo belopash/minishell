@@ -6,7 +6,7 @@
 /*   By: bbrock <bbrock@student.21-school.ru>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/11 18:18:42 by bbrock            #+#    #+#             */
-/*   Updated: 2021/01/14 19:26:04 by bbrock           ###   ########.fr       */
+/*   Updated: 2021/01/20 18:30:23 by bbrock           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,4 +60,14 @@ t_list *ft_tolist(char **arr)
         i++;
     }
     return (list);
+}
+
+int ft_arrlen(void **arr)
+{
+    int i;
+
+    i = 0;
+    while (arr[i])
+        i++;
+    return i;
 }
