@@ -6,7 +6,7 @@
 /*   By: bbrock <bbrock@student.21-school.ru>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/11 18:16:09 by bbrock            #+#    #+#             */
-/*   Updated: 2021/01/21 16:52:49 by bbrock           ###   ########.fr       */
+/*   Updated: 2021/01/21 17:14:57 by bbrock           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,15 +75,13 @@ int execute(t_command *command)
 	char **args;
 	char *prog;
 
-	if (command->input < 0 || command->output < 0)
-		return (-1);
 	dup2(command->input, 0);
 	if (command->input != 0)
 		close(command->input);
 	dup2(command->output, 1);
 	if (command->output != 1)
 		close(command->output);
-	if (command->list)
+	if (command->list && command->input >= 0 && command->output >= 0)
 	{
 		args = ft_toarray(command->list);
 		if (execbi(command, args) < 0)
