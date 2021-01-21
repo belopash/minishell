@@ -20,7 +20,7 @@
 #ifndef PATH_MAX
 #include <linux/limits.h>
 #endif
-
+#include <errno.h>
 
 static char *ft_search_env(int *i, char *line, char **env)
 {
@@ -114,12 +114,12 @@ static int ft_if_double_quotes(int *j, char *content, char *line, t_shell *shell
     if (line[i] == '"')
     {
         i++;
-        if (line[i] == '"' && (line[i+1] == '\0' || line[i+1] == ' ' || line[i+1] == '>' || line[i+1] == '<' || line[i+1] == ';' || line[i+1] == '|'))
+        if (line[i] == '"' && (line[i + 1] == '\0' || line[i + 1] == ' ' || line[i + 1] == '>' || line[i + 1] == '<' || line[i + 1] == ';' || line[i + 1] == '|'))
         {
             content[*j] = '\0';
             (*j)++;
             i++;
-            return(i);
+            return (i);
         }
         while (line[i] != '"' && line[i])
         {
@@ -150,12 +150,12 @@ static int ft_if_single_quotes(int *j, char *content, char *line, t_shell *shell
     if (line[i] == '\'')
     {
         i++;
-        if (line[i] == '\'' && (line[i+1] == '\0' || line[i+1] == ' ' || line[i+1] == '>' || line[i+1] == '<' || line[i+1] == ';' || line[i+1] == '|'))
+        if (line[i] == '\'' && (line[i + 1] == '\0' || line[i + 1] == ' ' || line[i + 1] == '>' || line[i + 1] == '<' || line[i + 1] == ';' || line[i + 1] == '|'))
         {
             content[*j] = '\0';
             (*j)++;
             i++;
-            return(i);
+            return (i);
         }
         while (line[i] != '\'' && line[i])
         {
@@ -174,6 +174,8 @@ static int ft_if_single_quotes(int *j, char *content, char *line, t_shell *shell
     return (i);
 }
 
+
+
 static int if_next_command(int *i, char *line, t_command **command, t_shell *shell)
 {
     int exit = 0;
@@ -183,33 +185,34 @@ static int if_next_command(int *i, char *line, t_command **command, t_shell *she
         if (line[*i] == ';' && !((*command)->list))
         {
             write(2, "Error: syntax error near unexpected token ;\n", 44);
-            shell->code = 1;
+            shell->code = 2;
             (*i)++;
             return (1);
         }
-        
+
         if ((*command)->flags.redir_r > 0)
         {
             write(2, "Error: syntax error after unexpected token >\n", 45);
-            shell->code = 1;
+            shell->code = 2;
             (*command)->flags.redir_r = 0;
             return (1);
         }
-        
+
         if ((*command)->flags.redir_l > 0)
         {
             write(2, "Error: syntax error after unexpected token <\n", 45);
-            shell->code = 1;
+            shell->code = 2;
             (*command)->flags.redir_l = 0;
             return (1);
         }
-        
-        
+
         int pid;
         int status;
         (*command)->execute(*command);
         while ((pid = wait(&status)) > 0)
         {
+            if (exit)
+                continue;
             if (WIFEXITED(status))
             {
                 if ((shell->code = WEXITSTATUS(status)) != 0)
@@ -220,8 +223,8 @@ static int if_next_command(int *i, char *line, t_command **command, t_shell *she
             }
             else if (WIFSIGNALED(status))
             {
-                if (!exit)
-                    write(1, "\n", 1);
+                shell->code = WTERMSIG(status) + 128;
+                write(1, "\n", 1);
                 kill(0, SIGQUIT);
                 exit = 1;
             }
@@ -245,7 +248,7 @@ static int ft_if_pipe(int *i, char *line, t_command **command, t_shell *shell)
             (*i)++;
             return (1);
         }
-        
+
         int fd_p[2];
         pipe(fd_p);
         if ((*command)->type == DEFAULT)
@@ -337,7 +340,7 @@ int ft_parsing(t_shell *shell, char *line)
             continue;
         if (i < (i = i + ft_if_single_quotes(&j, content, line + i, shell)))
             continue;
-        
+
         if (line[i] == '\\')
         {
             i++;

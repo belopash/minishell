@@ -6,7 +6,7 @@
 /*   By: bbrock <bbrock@student.21-school.ru>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/11 19:05:21 by bbrock            #+#    #+#             */
-/*   Updated: 2021/01/20 18:36:06 by bbrock           ###   ########.fr       */
+/*   Updated: 2021/01/21 12:34:39 by bbrock           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,9 +93,9 @@ static void constructor(t_shell *shell, char **env, t_builtin *builtins)
     shell->start = start;
     shell->code = 0;
     if (!(shell->env = new_env(env)))
-        exit(-1);
+        exit(1);
     if (!(shell->builtins = new_builtin_manager(shell, builtins)))
-        exit(-1);
+        exit(1);
 }
 
 t_shell *new_shell(char **env, t_builtin *builtins)
@@ -103,7 +103,7 @@ t_shell *new_shell(char **env, t_builtin *builtins)
     t_shell *shell;
 
     if (!(shell = malloc(sizeof(t_shell))))
-        exit(-1);
+        exit(1);
     constructor(shell, env, builtins);
     return shell;
 }

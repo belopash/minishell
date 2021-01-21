@@ -6,7 +6,7 @@
 /*   By: bbrock <bbrock@student.21-school.ru>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/07 19:20:44 by bbrock            #+#    #+#             */
-/*   Updated: 2021/01/20 15:40:58 by bbrock           ###   ########.fr       */
+/*   Updated: 2021/01/21 12:34:39 by bbrock           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,7 +47,7 @@ static void constructor(t_builtins_manager *builtins_manager, t_shell *shell, t_
 	while (builtins[i].name)
 	{
 		if (!(t = ft_lstnew(new_builtin(shell, builtins[i].name, builtins[i].command))))
-			exit(-1);
+			exit(1);
 		ft_lstadd_back(&(builtins_manager->list), t);
 		i++;
 	}
@@ -60,7 +60,7 @@ t_builtins_manager *new_builtin_manager(t_shell *shell, t_builtin *builtins)
 	t_builtins_manager *builtins_manger;
 
 	if (!(builtins_manger = malloc(sizeof(t_builtins_manager))))
-		exit(-1);
+		exit(1);
 	constructor(builtins_manger, shell, builtins);
 	return builtins_manger;
 }

@@ -6,7 +6,7 @@
 /*   By: bbrock <bbrock@student.21-school.ru>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/07 19:20:44 by bbrock            #+#    #+#             */
-/*   Updated: 2021/01/18 21:17:51 by bbrock           ###   ########.fr       */
+/*   Updated: 2021/01/21 12:34:39 by bbrock           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,7 @@ t_builtin *new_builtin(t_shell *shell, char *name, int (*command)(t_builtin *bui
 	t_builtin *builtin;
 
 	if (!(builtin = malloc(sizeof(t_builtin))))
-		exit(-1);
+		exit(1);
 	constructor(builtin, shell, name, command);
 	return builtin;
 }
