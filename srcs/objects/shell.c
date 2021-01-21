@@ -6,7 +6,7 @@
 /*   By: bbrock <bbrock@student.21-school.ru>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/11 19:05:21 by bbrock            #+#    #+#             */
-/*   Updated: 2021/01/21 19:45:22 by bbrock           ###   ########.fr       */
+/*   Updated: 2021/01/21 20:07:44 by bbrock           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,7 @@ static int	start(t_shell *shell)
 	while (1)
 	{
 		signal(SIGINT, putnlandname);
-		signal(SIGQUIT, del);
+		signal(SIGQUIT, delete);
 		print_name();
 		while (!(r = get_next_line(0, &line)) && ft_strlen(line))
 			;

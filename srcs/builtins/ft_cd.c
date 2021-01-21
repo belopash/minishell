@@ -6,7 +6,7 @@
 /*   By: bbrock <bbrock@student.21-school.ru>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/05 13:50:29 by bbrock            #+#    #+#             */
-/*   Updated: 2021/01/21 19:14:37 by bbrock           ###   ########.fr       */
+/*   Updated: 2021/01/21 20:05:06 by bbrock           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,12 +20,12 @@
 # include <linux/limits.h>
 #endif
 
-int ft_cd(t_builtin *builtin, char **args)
+int	ft_cd(t_builtin *builtin, char **args)
 {
 	char path[PATH_MAX];
 	char *t;
 
-	if (ft_arrlen(args) > 2)
+	if (ft_arrlen((void **)args) > 2)
 		return (error("cd", "too many arguments"));
 	if (!getcwd(path, PATH_MAX))
 		return (error("cd", strerror(errno)));

@@ -6,7 +6,7 @@
 /*   By: bbrock <bbrock@student.21-school.ru>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/21 19:20:06 by bbrock            #+#    #+#             */
-/*   Updated: 2021/01/21 19:49:18 by bbrock           ###   ########.fr       */
+/*   Updated: 2021/01/21 20:03:23 by bbrock           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,7 +79,6 @@ static void	start_process(t_command *command, char **args)
 
 int			execute(t_command *command)
 {
-	int		ret;
 	char	**args;
 
 	dup2(command->input, 0);

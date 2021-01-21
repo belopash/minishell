@@ -49,15 +49,6 @@ static char *ft_search_env(int *i, char *line, char **env)
 	return (ft_strdup(""));
 }
 
-static int error(char *name, char *error)
-{
-	ft_putstr_fd("minishell: ", 2);
-	ft_putstr_fd(name, 2);
-	ft_putstr_fd(": ", 2);
-	ft_putendl_fd(error, 2);
-	return (1);
-}
-
 static void ft_add_arg(int *j, char **content, t_command *command)
 {
 	(*content)[*j] = '\0';

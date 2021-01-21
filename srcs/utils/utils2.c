@@ -6,7 +6,7 @@
 /*   By: bbrock <bbrock@student.21-school.ru>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/21 19:44:41 by bbrock            #+#    #+#             */
-/*   Updated: 2021/01/21 19:45:13 by bbrock           ###   ########.fr       */
+/*   Updated: 2021/01/21 20:07:38 by bbrock           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,14 +18,16 @@ int			print_name(void)
 	return (0);
 }
 
-void		putnlandname(void)
+void		putnlandname(int s)
 {
 	write(1, "\n", 1);
 	print_name();
+	(void)s;
 }
 
-void		del(void)
+void		delete(int s)
 {
 	write(1, "\b \b", 3);
 	write(1, "\b \b", 3);
+	(void)s;
 }
