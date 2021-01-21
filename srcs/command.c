@@ -6,7 +6,7 @@
 /*   By: bbrock <bbrock@student.21-school.ru>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/11 18:16:09 by bbrock            #+#    #+#             */
-/*   Updated: 2021/01/21 13:18:16 by bbrock           ###   ########.fr       */
+/*   Updated: 2021/01/21 16:52:49 by bbrock           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,6 +75,8 @@ int execute(t_command *command)
 	char **args;
 	char *prog;
 
+	if (command->input < 0 || command->output < 0)
+		return (-1);
 	dup2(command->input, 0);
 	if (command->input != 0)
 		close(command->input);

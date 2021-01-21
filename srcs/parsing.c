@@ -49,6 +49,15 @@ static char *ft_search_env(int *i, char *line, char **env)
     return (ft_strdup(""));
 }
 
+static int error(char *name, char *error)
+{
+	ft_putstr_fd("minishell: ", 2);
+	ft_putstr_fd(name, 2);
+	ft_putstr_fd(": ", 2);
+	ft_putendl_fd(error, 2);
+	return (1);
+}
+
 static void ft_add_arg(int *j, char **content, t_command *command)
 {
     (*content)[*j] = '\0';
@@ -70,9 +79,11 @@ static void ft_add_arg(int *j, char **content, t_command *command)
         }
         if (command->flags.redir_l != 0)
         {
-            command->input = open(*content, O_CREAT | O_RDONLY, 0666);
+            command->input = open(*content, O_RDONLY, 0666);
             command->flags.redir_l = 0;
         }
+        if (command->output < 0 || command->input < 0)
+            error(*content, strerror(errno));
         command->filename = *content;
     }
 }
@@ -254,12 +265,9 @@ static int ft_if_pipe(int *i, char *line, t_command **command, t_shell *shell)
         if ((*command)->type == DEFAULT)
             (*command)->output = fd_p[1];
         (*command)->type = (*command)->type | PIPE;
-        if ((*command)->type == REDPIPE)
-        {
-            int fd = open(((*command)->filename), O_RDONLY, 0666);
-            dup2(fd, fd_p[0]);
-        }
-        (*command)->execute((*command));
+        (*command)->execute(*command);
+        if ((*command)->type & REDIRECT == REDIRECT)
+            close(fd_p[1]);
         (*command)->destroy(*command);
         *command = new_command(shell, fd_p[0], 1);
         (*command)->type = (*command)->type | PIPE;
