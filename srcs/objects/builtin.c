@@ -6,7 +6,7 @@
 /*   By: bbrock <bbrock@student.21-school.ru>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/07 19:20:44 by bbrock            #+#    #+#             */
-/*   Updated: 2021/01/21 12:34:39 by bbrock           ###   ########.fr       */
+/*   Updated: 2021/01/21 19:37:00 by bbrock           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,15 +14,16 @@
 #include <unistd.h>
 #include "../includes/libft.h"
 
-static void destroy(t_builtin *builtin)
+static void	destroy(t_builtin *builtin)
 {
-    if (!builtin)
-        return;
-    ft_bzero(builtin, sizeof(t_builtin));
-    free(builtin);
+	if (!builtin)
+		return ;
+	ft_bzero(builtin, sizeof(t_builtin));
+	free(builtin);
 }
 
-static void constructor(t_builtin *builtin, t_shell *shell, char *name, int (*command)(t_builtin *builtin, char **argv))
+static void	constructor(t_builtin *builtin, t_shell *shell, char *name,
+						int (*command)(t_builtin *builtin, char **argv))
 {
 	builtin->shell = shell;
 	builtin->name = name;
@@ -30,12 +31,13 @@ static void constructor(t_builtin *builtin, t_shell *shell, char *name, int (*co
 	builtin->destroy = destroy;
 }
 
-t_builtin *new_builtin(t_shell *shell, char *name, int (*command)(t_builtin *builtin, char **argv))
+t_builtin	*new_builtin(t_shell *shell, char *name,
+						int (*command)(t_builtin *builtin, char **argv))
 {
 	t_builtin *builtin;
 
 	if (!(builtin = malloc(sizeof(t_builtin))))
 		exit(1);
 	constructor(builtin, shell, name, command);
-	return builtin;
+	return (builtin);
 }

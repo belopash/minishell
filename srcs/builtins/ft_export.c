@@ -1,34 +1,23 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   t_shell.h                                          :+:      :+:    :+:   */
+/*   ft_export.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: bbrock <bbrock@student.21-school.ru>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2021/01/05 15:42:15 by bbrock            #+#    #+#             */
-/*   Updated: 2021/01/21 19:54:54 by bbrock           ###   ########.fr       */
+/*   Created: 2021/01/14 19:16:49 by bbrock            #+#    #+#             */
+/*   Updated: 2021/01/21 17:17:15 by bbrock           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef T_SHELL_H
-# define T_SHELL_H
+#include "../includes/libft.h"
+#include "../includes/t_shell.h"
 
-# include "./libft.h"
-# include "./t_env.h"
-# include "./t_builtin.h"
-
-typedef struct	s_shell
+int ft_export(t_builtin *builtin, char **args)
 {
-	int			in;
-	int			out;
-	int			waiting;
-	t_env		*env;
-	t_builtins	*builtins;
-	int			(*start)(struct s_shell *);
-	void		(*destroy)(struct s_shell *);
-	int			code;
-}				t_shell;
-
-t_shell			*new_shell(char **env, t_builtin *builtins);
-
-#endif
+	if (!ft_strchr(args[1], '='))
+		return (-1);
+	if (!builtin->shell->env->add(builtin->shell->env, args[1]))
+		return (-1);
+	return (0);
+}
