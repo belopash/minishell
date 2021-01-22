@@ -6,7 +6,7 @@
 /*   By: bbrock <bbrock@student.21-school.ru>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/11 18:16:09 by bbrock            #+#    #+#             */
-/*   Updated: 2021/01/21 19:39:17 by bbrock           ###   ########.fr       */
+/*   Updated: 2021/01/22 19:54:14 by bbrock           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,7 @@ static void	destroy(t_command *command)
 {
 	if (!command)
 		return ;
+	ft_lstclear(&(command->list), free);
 	ft_bzero(command, sizeof(t_command));
 	free(command);
 }

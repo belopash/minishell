@@ -6,7 +6,7 @@
 /*   By: bbrock <bbrock@student.21-school.ru>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/11 19:05:21 by bbrock            #+#    #+#             */
-/*   Updated: 2021/01/22 11:52:16 by bbrock           ###   ########.fr       */
+/*   Updated: 2021/01/22 19:39:14 by bbrock           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,6 @@ static int	start(t_shell *shell)
 	char	*line;
 	int		r;
 
-	line = (char *)malloc(sizeof(char) * (BUFFER_SIZE + 1));
 	while (1)
 	{
 		signal(SIGINT, putnlandname);
