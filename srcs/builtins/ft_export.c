@@ -6,7 +6,7 @@
 /*   By: bbrock <bbrock@student.21-school.ru>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/14 19:16:49 by bbrock            #+#    #+#             */
-/*   Updated: 2021/01/22 14:55:17 by bbrock           ###   ########.fr       */
+/*   Updated: 2021/01/22 15:05:43 by bbrock           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ static int	ft_isvalid(char *env)
 	int i;
 
 	i = 0;
-	while (env[i] != '=')
+	while (env[i] != '=' && env[i] != '\0')
 	{
 		if (env[i] != '_' && !ft_isalnum(env[i]))
 			return (0);
@@ -42,8 +42,6 @@ int			ft_export(t_builtin *builtin, char **args)
 	i = 1;
 	while (args[i])
 	{
-		if (!ft_strchr(args[i], '='))
-			continue ;
 		if (!builtin->shell->env->add(builtin->shell->env, args[i]))
 			return (1);
 		i++;

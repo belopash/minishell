@@ -6,7 +6,7 @@
 /*   By: bbrock <bbrock@student.21-school.ru>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/15 14:26:12 by bbrock            #+#    #+#             */
-/*   Updated: 2021/01/21 20:04:38 by bbrock           ###   ########.fr       */
+/*   Updated: 2021/01/22 15:16:58 by bbrock           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,22 +18,27 @@ static char	*add(t_env *env, char *var)
 	t_list	*item;
 	int		namelen;
 
-	namelen = ft_strchr(var, '=') - var;
+	namelen = ft_strlen(var);
+	if (ft_strchr(var, '='))
+		namelen = ft_strchr(var, '=') - var;
 	item = env->list;
 	while (item)
 	{
 		if (ft_strncmp(item->content, var, namelen) == 0
-			&& *(char *)(item->content + namelen) == '=')
+			&& (*(char *)(item->content + namelen) == '='
+			|| *(char *)(item->content + namelen) == '\0'))
 		{
-			free(item->content);
-			if (!(item->content = ft_strdup(var)))
-				return (NULL);
+			if (ft_strchr(var, '='))
+			{
+				free(item->content);
+				if (!(item->content = ft_strdup(var)))
+					return (NULL);
+			}
 			return (item->content + namelen + 1);
 		}
 		item = item->next;
 	}
-	item = ft_lstnew(ft_strdup(var));
-	ft_lstadd_back(&(env->list), item);
+	ft_lstadd_back(&(env->list), ft_lstnew(ft_strdup(var)));
 	return (item->content + namelen + 1);
 }
 
