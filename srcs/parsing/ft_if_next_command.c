@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   next_command.c                                     :+:      :+:    :+:   */
+/*   ft_if_next_command.c                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ashea <ashea@student.21-school.ru>         +#+  +:+       +#+        */
+/*   By: bbrock <bbrock@student.21-school.ru>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/22 12:21:12 by ashea             #+#    #+#             */
-/*   Updated: 2021/01/22 12:21:14 by ashea            ###   ########.fr       */
+/*   Updated: 2021/01/22 12:22:22 by bbrock           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,20 +25,14 @@ static void ft_next_command_ut(t_shell *shell)
             continue;
         if (WIFEXITED(status))
         {
-            if ((shell->code = WEXITSTATUS(status)) != 0)
-            {
-                kill(0, SIGQUIT);
-                exit = 1;
-            }
+            shell->code = WEXITSTATUS(status);
         }
-        else
-            if (WIFSIGNALED(status))
-            {
-                shell->code = WTERMSIG(status) + 128;
-                write(1, "\n", 1);
-                kill(0, SIGQUIT);
-                exit = 1;
-            }
+        else if (WIFSIGNALED(status))
+        {
+            shell->code = WTERMSIG(status) + 128;
+            write(1, "\n", 1);
+            exit = 1;
+        }
     }
 }
 

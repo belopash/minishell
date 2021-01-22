@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_parsing.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ashea <ashea@student.21-school.ru>         +#+  +:+       +#+        */
+/*   By: bbrock <bbrock@student.21-school.ru>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/22 12:18:01 by ashea             #+#    #+#             */
-/*   Updated: 2021/01/22 12:18:04 by ashea            ###   ########.fr       */
+/*   Updated: 2021/01/22 11:24:09 by bbrock           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,7 +60,7 @@ static void ft_parsing_dop(char *content, char *line, t_command **command, t_she
     }
 }
 
-static void putnl(void)
+static void putnl(int s)
 {
 }
 

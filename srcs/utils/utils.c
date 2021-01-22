@@ -6,7 +6,7 @@
 /*   By: bbrock <bbrock@student.21-school.ru>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/11 18:18:42 by bbrock            #+#    #+#             */
-/*   Updated: 2021/01/21 19:59:12 by bbrock           ###   ########.fr       */
+/*   Updated: 2021/01/22 11:29:01 by bbrock           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,11 +73,11 @@ int		ft_arrlen(void **arr)
 	return (i);
 }
 
-int		error(char *name, char *error)
+int		error(char *name, char *error, int code)
 {
 	ft_putstr_fd("minishell: ", 2);
 	ft_putstr_fd(name, 2);
 	ft_putstr_fd(": ", 2);
 	ft_putendl_fd(error, 2);
-	return (1);
+	return (code);
 }

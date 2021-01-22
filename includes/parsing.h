@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parsing.h                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ashea <ashea@student.21-school.ru>         +#+  +:+       +#+        */
+/*   By: bbrock <bbrock@student.21-school.ru>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/22 12:09:41 by ashea             #+#    #+#             */
-/*   Updated: 2021/01/22 12:09:50 by ashea            ###   ########.fr       */
+/*   Updated: 2021/01/22 11:22:13 by bbrock           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,13 +23,13 @@
 #include <signal.h>
 #include <sys/stat.h>
 #include <fcntl.h>
-#include "../includes/t_command.h"
-#include "../includes/t_shell.h"
-#include "../includes/t_builtin.h"
-#include "../includes/builtins.h"
-#include "../includes/minishell.h"
-#include "../includes/libft.h"
-#include "../includes/utils.h"
+#include "./t_command.h"
+#include "./t_shell.h"
+#include "./t_builtin.h"
+#include "./builtins.h"
+#include "./minishell.h"
+#include "./libft.h"
+#include "./utils.h"
 #include <limits.h>
 #ifndef PATH_MAX
 #include <linux/limits.h>

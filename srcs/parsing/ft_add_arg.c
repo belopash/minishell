@@ -3,23 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   ft_add_arg.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ashea <ashea@student.21-school.ru>         +#+  +:+       +#+        */
+/*   By: bbrock <bbrock@student.21-school.ru>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/22 12:59:07 by ashea             #+#    #+#             */
-/*   Updated: 2021/01/22 12:59:13 by ashea            ###   ########.fr       */
+/*   Updated: 2021/01/22 11:29:59 by bbrock           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/parsing.h"
-
-static int error(char *name, char *error)
-{
-    ft_putstr_fd("minishell: ", 2);
-    ft_putstr_fd(name, 2);
-    ft_putstr_fd(": ", 2);
-    ft_putendl_fd(error, 2);
-    return (1);
-}
 
 void ft_add_arg(int *j, char **content, t_command *command)
 {
@@ -43,7 +34,7 @@ void ft_add_arg(int *j, char **content, t_command *command)
             command->flags.redir_l = 0;
         }
         if (command->output < 0 || command->input < 0)
-            error(*content, strerror(errno));
+            error(*content, strerror(errno), 1);
         command->filename = *content;
     }
 }
