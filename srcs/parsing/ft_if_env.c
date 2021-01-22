@@ -3,14 +3,15 @@
 /*                                                        :::      ::::::::   */
 /*   ft_if_env.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ashea <ashea@student.21-school.ru>         +#+  +:+       +#+        */
+/*   By: bbrock <bbrock@student.21-school.ru>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/22 12:28:45 by ashea             #+#    #+#             */
-/*   Updated: 2021/01/22 13:52:43 by ashea            ###   ########.fr       */
+/*   Updated: 2021/01/22 21:43:48 by bbrock           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../includes/parsing.h"
+#include "../../includes/parsing.h"
+#include "../../includes/libft.h"
 
 static char	*ft_search_env(int *i, char *line, char **env)
 {
@@ -23,26 +24,33 @@ static char	*ft_search_env(int *i, char *line, char **env)
 	j = 0;
 	while (line[*i] != ' ' && line[*i] != '$' && line[*i] != '"' &&
 			line[*i] != '\'' && line[*i] != ';' && line[*i])
-	{
-		var[j] = line[*i];
-		j++;
-		(*i)++;
-	}
+		var[j++] = line[(*i)++];
 	k = 0;
 	while (env[k])
 	{
 		if (!ft_strncmp(env[k], var, j))
+		{
+			free(var);
 			if (env[k][j] == '=')
 				return (ft_strdup(env[k] + j + 1));
+		}
 		k++;
 	}
+	free(var);
 	return (ft_strdup(""));
+}
+
+static void ft_doublefree(void *a, void *b)
+{
+	free(a);
+	free(b);
 }
 
 int			ft_if_env(int *j, char *content, char *line, t_shell *shell)
 {
 	int		i;
 	char	*tmp;
+	char	**t;
 
 	i = 0;
 	if (line[i] == '$' && ((line[i + 1] != '$' && line[i + 1] != '\\' &&
@@ -50,20 +58,18 @@ int			ft_if_env(int *j, char *content, char *line, t_shell *shell)
 					!= '"' && line[i + 1] != '\0') || line[i + 1] == '?'))
 	{
 		i++;
+		t = ft_toarray(shell->env->list);
 		if (line[i] == '?')
 		{
 			i++;
-			if (!(tmp = ft_strdup(ft_itoa(shell->code))))
+			if (!(tmp = ft_itoa(shell->code)))
 				exit(-1);
 		}
-		else if (!(tmp = ft_search_env(&i, line, ft_toarray(shell->env->list))))
+		else if (!(tmp = ft_search_env(&i, line, t)))
 			exit(-1);
-		while (tmp[0])
-		{
-			content[*j] = tmp[0];
-			tmp++;
-			(*j)++;
-		}
+		ft_strlcpy(content + *j, tmp, ft_strlen(tmp) + 1);
+		(*j) += ft_strlen(tmp);
+		ft_doublefree(tmp, t);
 	}
 	return (i);
 }

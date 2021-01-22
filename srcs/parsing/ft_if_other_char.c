@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_if_other_char.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ashea <ashea@student.21-school.ru>         +#+  +:+       +#+        */
+/*   By: bbrock <bbrock@student.21-school.ru>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/22 12:44:20 by ashea             #+#    #+#             */
-/*   Updated: 2021/01/22 14:03:59 by ashea            ###   ########.fr       */
+/*   Updated: 2021/01/22 21:32:03 by bbrock           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,7 @@ int			ft_if_other_char(int *j, char *content, char *line)
 	}
 	while (line[i] != ' ' && line[i] != '\0' && line[i] != '\'' &&
 			line[i] != '"' && line[i] != ';' && line[i] != '|' &&
-			line[i] != '>' && line[i] != '<')
+			line[i] != '>' && line[i] != '<' && line[i] != '$')
 	{
 		content[*j] = line[i];
 		(*j)++;
