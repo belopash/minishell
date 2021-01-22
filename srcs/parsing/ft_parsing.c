@@ -6,7 +6,7 @@
 /*   By: bbrock <bbrock@student.21-school.ru>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/22 12:18:01 by ashea             #+#    #+#             */
-/*   Updated: 2021/01/22 12:47:45 by bbrock           ###   ########.fr       */
+/*   Updated: 2021/01/22 14:51:57 by bbrock           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,7 +68,7 @@ static void		ft_parsing_dop(char *content, char *line,
 
 static void		donothing(int i)
 {
-    (void)i;
+	(void)i;
 }
 
 int				ft_parsing(t_shell *shell, char *line)

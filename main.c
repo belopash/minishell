@@ -6,7 +6,7 @@
 /*   By: bbrock <bbrock@student.21-school.ru>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/21 19:56:33 by bbrock            #+#    #+#             */
-/*   Updated: 2021/01/22 11:51:47 by bbrock           ###   ########.fr       */
+/*   Updated: 2021/01/22 14:52:04 by bbrock           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,8 +30,8 @@ int	main(int argc, char **argv, char **envp)
 		{0, 0, 0, 0}};
 	t_shell				*shell;
 
-    (void)argc;
-    (void)argv;
+	(void)argc;
+	(void)argv;
 	if (!(shell = new_shell(envp, builtins)))
 		return (1);
 	shell->start(shell);

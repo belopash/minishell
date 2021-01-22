@@ -6,7 +6,7 @@
 /*   By: bbrock <bbrock@student.21-school.ru>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/05 12:09:06 by bbrock            #+#    #+#             */
-/*   Updated: 2021/01/22 12:51:46 by bbrock           ###   ########.fr       */
+/*   Updated: 2021/01/22 14:51:37 by bbrock           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,8 +32,8 @@ int			ft_echo(t_builtin *builtin, char **args)
 {
 	int		i;
 	bool	nonewline;
-    
-    (void)builtin;
+
+	(void)builtin;
 	i = 1;
 	nonewline = 0;
 	while (args[i] && args[i][0] == '-')
