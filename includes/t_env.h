@@ -6,7 +6,7 @@
 /*   By: bbrock <bbrock@student.21-school.ru>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/15 14:21:03 by bbrock            #+#    #+#             */
-/*   Updated: 2021/01/21 19:55:55 by bbrock           ###   ########.fr       */
+/*   Updated: 2021/01/22 20:09:27 by bbrock           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ typedef struct	s_env
 {
 	t_list	*list;
 	char	*(*get)(struct s_env *, char *);
-	char	*(*add)(struct s_env *, char *);
+	void	(*add)(struct s_env *, char *);
 	void	(*del)(struct s_env *, char *);
 	void	(*destroy)(struct s_env *);
 }				t_env;

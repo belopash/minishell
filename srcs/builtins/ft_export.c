@@ -6,7 +6,7 @@
 /*   By: bbrock <bbrock@student.21-school.ru>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/14 19:16:49 by bbrock            #+#    #+#             */
-/*   Updated: 2021/01/22 15:05:43 by bbrock           ###   ########.fr       */
+/*   Updated: 2021/01/22 20:10:04 by bbrock           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,8 +42,7 @@ int			ft_export(t_builtin *builtin, char **args)
 	i = 1;
 	while (args[i])
 	{
-		if (!builtin->shell->env->add(builtin->shell->env, args[i]))
-			return (1);
+		builtin->shell->env->add(builtin->shell->env, args[i]);
 		i++;
 	}
 	return (0);

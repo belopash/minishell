@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   command2.c                                         :+:      :+:    :+:   */
+/*   ft_command2.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: bbrock <bbrock@student.21-school.ru>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/21 19:20:06 by bbrock            #+#    #+#             */
-/*   Updated: 2021/01/22 19:47:12 by bbrock           ###   ########.fr       */
+/*   Updated: 2021/01/22 20:04:45 by bbrock           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,19 +57,21 @@ static char *find_path(char *pathv, char *name)
 			path = name;
 		i++;
 	}
-	free(paths);
+	ft_free2(paths);
 	return (path);
 }
 
 static void start_process(t_command *command, char **args)
 {
 	char *prog;
+	char **envs;
 
 	if (!fork())
 	{
 		prog = find_path(command->shell->env->get(command->shell->env, "PATH"),
 						 args[0]);
-		execve(prog, args, ft_toarray(command->shell->env->list));
+		envs = ft_toarray(command->shell->env->list);
+		execve(prog, args, envs);
 		exit(error(args[0], strerror(errno), 1));
 	}
 }

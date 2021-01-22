@@ -1,19 +1,19 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   env.c                                              :+:      :+:    :+:   */
+/*   ft_env.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: bbrock <bbrock@student.21-school.ru>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/15 14:26:12 by bbrock            #+#    #+#             */
-/*   Updated: 2021/01/22 15:16:58 by bbrock           ###   ########.fr       */
+/*   Updated: 2021/01/22 20:09:07 by bbrock           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/t_env.h"
 #include "../includes/utils.h"
 
-static char	*add(t_env *env, char *var)
+static void	add(t_env *env, char *var)
 {
 	t_list	*item;
 	int		namelen;
@@ -32,14 +32,13 @@ static char	*add(t_env *env, char *var)
 			{
 				free(item->content);
 				if (!(item->content = ft_strdup(var)))
-					return (NULL);
+					exit(1);
 			}
-			return (item->content + namelen + 1);
+			return ;
 		}
 		item = item->next;
 	}
 	ft_lstadd_back(&(env->list), ft_lstnew(ft_strdup(var)));
-	return (item->content + namelen + 1);
 }
 
 static void	del(t_env *env, char *name)
