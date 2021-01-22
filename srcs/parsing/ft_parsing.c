@@ -24,7 +24,7 @@ static int		ft_parsing_arg(int *j, char *content, char *line,
 		return (delta);
 	if ((delta = ft_if_single_quotes(j, content, line, shell)) > 0)
 		return (delta);
-	if ((delta = ft_if_other_char(j, content, line, shell)) > 0)
+	if ((delta = ft_if_other_char(j, content, line)) > 0)
 		return (delta);
 	return (0);
 }
@@ -66,8 +66,9 @@ static void		ft_parsing_dop(char *content, char *line,
 	}
 }
 
-static void		donothing(int s)
+static void		donothing(int i)
 {
+    (void)i;
 }
 
 int				ft_parsing(t_shell *shell, char *line)

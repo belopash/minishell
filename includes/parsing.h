@@ -43,6 +43,6 @@ int		ft_if_redirect(int *i, char *line, t_command *command, t_shell *shell);
 int		ft_if_env(int *j, char *content, char *line, t_shell *shell);
 int		ft_if_double_quotes(int *j, char *content, char *line, t_shell *shell);
 int		ft_if_single_quotes(int *j, char *content, char *line, t_shell *shell);
-int		ft_if_other_char(int *j, char *content, char *line, t_shell *shell);
+int		ft_if_other_char(int *j, char *content, char *line);
 
 #endif

@@ -32,7 +32,8 @@ int			ft_echo(t_builtin *builtin, char **args)
 {
 	int		i;
 	bool	nonewline;
-
+    
+    (void)builtin;
 	i = 1;
 	nonewline = 0;
 	while (args[i] && args[i][0] == '-')

@@ -12,7 +12,7 @@
 
 
 NAME = minishell
-COMPIL = gcc main.c ./srcs/*/*.c ./lib/*.a -I ./includes/
+COMPIL = gcc -Wall -Wextra -Werror main.c ./srcs/*/*.c ./lib/*.a -I ./includes/
 
 all: $(NAME)
 

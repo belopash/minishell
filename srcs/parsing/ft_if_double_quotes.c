@@ -62,7 +62,6 @@ int				ft_if_double_quotes(int *j, char *content,
 		char *line, t_shell *shell)
 {
 	int			i;
-	int			delta;
 
 	i = 0;
 	if (line[i] == '"')
