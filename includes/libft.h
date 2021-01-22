@@ -6,7 +6,7 @@
 /*   By: bbrock <bbrock@student.21-school.ru>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/05/01 11:36:57 by bbrock            #+#    #+#             */
-/*   Updated: 2020/05/09 17:47:41 by bbrock           ###   ########.fr       */
+/*   Updated: 2021/01/21 19:50:46 by bbrock           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@
 # include <string.h>
 # include <unistd.h>
 
-#define BUFFER_SIZE 32
+# define BUFFER_SIZE 32
 
 typedef	unsigned char	t_byte;
 typedef	struct			s_list

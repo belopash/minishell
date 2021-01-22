@@ -1,34 +1,33 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   t_shell.h                                          :+:      :+:    :+:   */
+/*   utils2.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: bbrock <bbrock@student.21-school.ru>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2021/01/05 15:42:15 by bbrock            #+#    #+#             */
-/*   Updated: 2021/01/21 19:54:54 by bbrock           ###   ########.fr       */
+/*   Created: 2021/01/21 19:44:41 by bbrock            #+#    #+#             */
+/*   Updated: 2021/01/21 20:07:38 by bbrock           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef T_SHELL_H
-# define T_SHELL_H
+#include <unistd.h>
 
-# include "./libft.h"
-# include "./t_env.h"
-# include "./t_builtin.h"
-
-typedef struct	s_shell
+int			print_name(void)
 {
-	int			in;
-	int			out;
-	int			waiting;
-	t_env		*env;
-	t_builtins	*builtins;
-	int			(*start)(struct s_shell *);
-	void		(*destroy)(struct s_shell *);
-	int			code;
-}				t_shell;
+	write(1, "\e[1;34mminishell\e[0m$> ", 23);
+	return (0);
+}
 
-t_shell			*new_shell(char **env, t_builtin *builtins);
+void		putnlandname(int s)
+{
+	write(1, "\n", 1);
+	print_name();
+	(void)s;
+}
 
-#endif
+void		delete(int s)
+{
+	write(1, "\b \b", 3);
+	write(1, "\b \b", 3);
+	(void)s;
+}

@@ -1,20 +1,31 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_unset.c                                         :+:      :+:    :+:   */
+/*   ft_pwd.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: bbrock <bbrock@student.21-school.ru>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2021/01/14 19:16:49 by bbrock            #+#    #+#             */
-/*   Updated: 2021/01/18 20:55:03 by bbrock           ###   ########.fr       */
+/*   Created: 2021/01/05 13:20:55 by bbrock            #+#    #+#             */
+/*   Updated: 2021/01/21 17:17:25 by bbrock           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+#include <limits.h>
+#include <unistd.h>
 #include "../includes/libft.h"
 #include "../includes/t_shell.h"
+#include <limits.h>
+#ifndef PATH_MAX
+#include <linux/limits.h>
+#endif
 
-int ft_unset(t_builtin *builtin, char **args)
+int ft_pwd(t_builtin *builtin, char **args)
 {
-    builtin->shell->env->del(builtin->shell->env, args[1]);
-    return (0);
+	char buf[PATH_MAX + 1];
+
+	if (!getcwd(buf, PATH_MAX))
+		return -1;
+	write(1, buf, ft_strlen(buf));
+	write(1, "\n", 1);
+	return 0;
 }
