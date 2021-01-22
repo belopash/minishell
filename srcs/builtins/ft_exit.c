@@ -1,54 +1,44 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_echo.c                                          :+:      :+:    :+:   */
+/*   ft_exit.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: bbrock <bbrock@student.21-school.ru>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2021/01/05 12:09:06 by bbrock            #+#    #+#             */
-/*   Updated: 2021/01/22 12:51:46 by bbrock           ###   ########.fr       */
+/*   Created: 2021/01/22 11:25:44 by bbrock            #+#    #+#             */
+/*   Updated: 2021/01/22 12:50:36 by bbrock           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <stdbool.h>
 #include "../includes/libft.h"
 #include "../includes/t_shell.h"
+#include "../includes/utils.h"
 
-static bool	ft_isflags(char *flags, char *str)
+int	ft_isnumber(char *str)
 {
 	int i;
 
 	i = 0;
 	while (str[i])
 	{
-		if (!ft_strchr(flags, str[i]))
-			return (false);
-		i++;
+		if (!ft_isdigit(str[i]))
+			return (0);
 	}
-	return (i && true);
+	return (1 && i);
 }
 
-int			ft_echo(t_builtin *builtin, char **args)
+int	ft_exit(t_builtin *builtin, char **args)
 {
-	int		i;
-	bool	nonewline;
+	int code;
 
-	i = 1;
-	nonewline = 0;
-	while (args[i] && args[i][0] == '-')
-	{
-		if (ft_isflags(args[i], "n"))
-			nonewline = nonewline | true;
-		i++;
-	}
-	while (args[i])
-	{
-		write(1, args[i], ft_strlen(args[i]));
-		if (args[i + 1])
-			write(1, " ", 1);
-		i++;
-	}
-	if (!nonewline)
-		write(1, "\n", 1);
+	ft_putendl_fd("exit", builtin->shell->out);
+	if (ft_arrlen((void **)args) == 1)
+		exit(builtin->shell->code);
+	if (!ft_isnumber(args[1]))
+		exit(error("exit", "numeric argument required", 2));
+	code = ft_atoi(args[1]);
+	if (ft_arrlen((void **)args) > 2)
+		exit(error("exit", "too many arguments", code));
+	exit(code);
 	return (0);
 }

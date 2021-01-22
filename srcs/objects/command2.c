@@ -6,7 +6,7 @@
 /*   By: bbrock <bbrock@student.21-school.ru>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/21 19:20:06 by bbrock            #+#    #+#             */
-/*   Updated: 2021/01/21 20:03:23 by bbrock           ###   ########.fr       */
+/*   Updated: 2021/01/22 11:52:50 by bbrock           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,8 +72,7 @@ static void	start_process(t_command *command, char **args)
 		prog = find_path(command->shell->env->get(command->shell->env, "PATH"),
 							args[0]);
 		execve(prog, args, ft_toarray(command->shell->env->list));
-		error(args[0], strerror(errno));
-		exit(1);
+		exit(error(args[0], strerror(errno), 1));
 	}
 }
 

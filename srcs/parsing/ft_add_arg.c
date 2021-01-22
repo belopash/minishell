@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_add_arg.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ashea <ashea@student.21-school.ru>         +#+  +:+       +#+        */
+/*   By: bbrock <bbrock@student.21-school.ru>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/22 12:59:07 by ashea             #+#    #+#             */
-/*   Updated: 2021/01/22 13:27:51 by ashea            ###   ########.fr       */
+/*   Updated: 2021/01/22 16:07:48 by ashea            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,11 +23,11 @@ void		ft_add_arg(int *j, char **content, t_command *command)
 		if (command->flags.redir_r != 0)
 		{
 			if (command->flags.redir_r == 1)
-				command->output = open(*content, O_CREAT | O_WRONLY
-						| O_TRUNC, 0666);
+				command->output = open(*content,
+										O_CREAT | O_WRONLY | O_TRUNC, 0666);
 			else
-				command->output = open(*content, O_CREAT | O_WRONLY
-						| O_APPEND, 0666);
+				command->output = open(*content,
+										O_CREAT | O_WRONLY | O_APPEND, 0666);
 			command->flags.redir_r = 0;
 		}
 		if (command->flags.redir_l != 0)
@@ -36,7 +36,7 @@ void		ft_add_arg(int *j, char **content, t_command *command)
 			command->flags.redir_l = 0;
 		}
 		if (command->output < 0 || command->input < 0)
-			error(*content, strerror(errno));
+			error(*content, strerror(errno), 1);
 		command->filename = *content;
 	}
 }

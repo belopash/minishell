@@ -6,7 +6,7 @@
 /*   By: bbrock <bbrock@student.21-school.ru>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/07 19:24:32 by bbrock            #+#    #+#             */
-/*   Updated: 2021/01/21 19:53:27 by bbrock           ###   ########.fr       */
+/*   Updated: 2021/01/22 11:50:29 by bbrock           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,5 +22,6 @@ int ft_env(t_builtin *builtin, char **args);
 int ft_export(t_builtin *builtin, char **args);
 int ft_unset(t_builtin *builtin, char **args);
 int execbi(t_builtin *builtin, char **args);
+int ft_exit(t_builtin *builtin, char **args);
 
 #endif

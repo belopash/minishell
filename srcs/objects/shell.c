@@ -6,7 +6,7 @@
 /*   By: bbrock <bbrock@student.21-school.ru>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/11 19:05:21 by bbrock            #+#    #+#             */
-/*   Updated: 2021/01/21 20:07:44 by bbrock           ###   ########.fr       */
+/*   Updated: 2021/01/22 11:52:16 by bbrock           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,10 +39,10 @@ static int	start(t_shell *shell)
 			;
 		if (r < 0)
 			break ;
-		if ((r == 0 && ft_strlen(line) == 0) || !ft_strncmp(line, "exit", 4))
+		if ((r == 0 && ft_strlen(line) == 0))
 		{
 			write(1, "exit\n", 5);
-			break ;
+			exit(shell->code);
 		}
 		ft_parsing(shell, line);
 		free(line);
@@ -55,6 +55,8 @@ static void	destroy(t_shell *shell)
 {
 	if (!shell)
 		return ;
+	close(shell->in);
+	close(shell->out);
 	shell->env->destroy(shell->env);
 	ft_bzero(shell, sizeof(t_shell));
 	free(shell);

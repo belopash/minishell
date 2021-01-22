@@ -6,7 +6,7 @@
 /*   By: bbrock <bbrock@student.21-school.ru>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/21 19:56:33 by bbrock            #+#    #+#             */
-/*   Updated: 2021/01/21 20:02:38 by bbrock           ###   ########.fr       */
+/*   Updated: 2021/01/22 11:51:47 by bbrock           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,11 +26,13 @@ int	main(int argc, char **argv, char **envp)
 		(t_builtin){"env", ft_env},
 		(t_builtin){"export", ft_export},
 		(t_builtin){"unset", ft_unset},
+		(t_builtin){"exit", ft_exit},
 		{0, 0}};
 	t_shell				*shell;
 
 	if (!(shell = new_shell(envp, builtins)))
 		return (1);
 	shell->start(shell);
+	shell->destroy(shell);
 	return (0);
 }

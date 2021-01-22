@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_if_next_command.c                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ashea <ashea@student.21-school.ru>         +#+  +:+       +#+        */
+/*   By: bbrock <bbrock@student.21-school.ru>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/22 12:21:12 by ashea             #+#    #+#             */
-/*   Updated: 2021/01/22 13:36:48 by ashea            ###   ########.fr       */
+/*   Updated: 2021/01/22 12:54:39 by bbrock           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,28 +14,25 @@
 
 static void		ft_next_command_ut(t_shell *shell)
 {
-	int			pid;
-	int			status[2];
+	int pid;
+	int status;
+	int exit;
 
-	status[1] = 0;
-	while ((pid = wait(&(status[0]))) > 0)
+	exit = 0;
+	while ((pid = wait(&status)) > 0)
 	{
-		if (status[1])
+		if (exit)
 			continue;
-		if (WIFEXITED(status[0]))
+		if (WIFEXITED(status))
 		{
-			if ((shell->code = WEXITSTATUS(status[0])) != 0)
-			{
-				kill(0, SIGQUIT);
-				status[1] = 1;
-			}
+			shell->code = WEXITSTATUS(status);
 		}
-		else if (WIFSIGNALED(status[0]))
+		else if (WIFSIGNALED(status))
 		{
-			shell->code = WTERMSIG(status[0]) + 128;
-			write(1, "\n", 1);
+			shell->code = WTERMSIG(status) + 128;
 			kill(0, SIGQUIT);
-			status[1] = 1;
+			write(1, "\n", 1);
+			exit = 1;
 		}
 	}
 }
