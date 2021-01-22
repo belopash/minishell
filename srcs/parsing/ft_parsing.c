@@ -6,7 +6,7 @@
 /*   By: bbrock <bbrock@student.21-school.ru>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/22 12:18:01 by ashea             #+#    #+#             */
-/*   Updated: 2021/01/22 12:44:20 by bbrock           ###   ########.fr       */
+/*   Updated: 2021/01/22 12:47:45 by bbrock           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,7 +66,7 @@ static void		ft_parsing_dop(char *content, char *line,
 	}
 }
 
-static void putnl(int s)
+static void		donothing(int s)
 {
 }
 
@@ -78,8 +78,8 @@ int				ft_parsing(t_shell *shell, char *line)
 	if (!(content = (char *)malloc(sizeof(char) * (PATH_MAX + 1))))
 		exit(-1);
 	command = new_command(shell, 0, 1);
-	signal(SIGINT, putnl);
-	signal(SIGQUIT, putnl);
+	signal(SIGINT, donothing);
+	signal(SIGQUIT, donothing);
 	if (line[0] == '\0')
 		return (0);
 	ft_parsing_dop(content, line, &command, shell);

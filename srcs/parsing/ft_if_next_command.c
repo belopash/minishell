@@ -6,7 +6,7 @@
 /*   By: bbrock <bbrock@student.21-school.ru>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/22 12:21:12 by ashea             #+#    #+#             */
-/*   Updated: 2021/01/22 12:42:28 by bbrock           ###   ########.fr       */
+/*   Updated: 2021/01/22 12:54:39 by bbrock           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,26 +14,27 @@
 
 static void		ft_next_command_ut(t_shell *shell)
 {
-    int pid;
-    int status;
-    int exit;
-    
-    exit = 0;
-    while ((pid = wait(&status)) > 0)
-    {
-        if (exit)
-            continue;
-        if (WIFEXITED(status))
-        {
-            shell->code = WEXITSTATUS(status);
-        }
-        else if (WIFSIGNALED(status))
-        {
-            shell->code = WTERMSIG(status) + 128;
-            write(1, "\n", 1);
-            exit = 1;
-        }
-    }
+	int pid;
+	int status;
+	int exit;
+
+	exit = 0;
+	while ((pid = wait(&status)) > 0)
+	{
+		if (exit)
+			continue;
+		if (WIFEXITED(status))
+		{
+			shell->code = WEXITSTATUS(status);
+		}
+		else if (WIFSIGNALED(status))
+		{
+			shell->code = WTERMSIG(status) + 128;
+			kill(0, SIGQUIT);
+			write(1, "\n", 1);
+			exit = 1;
+		}
+	}
 }
 
 static int		ft_syntax_error(int *i, char *line,
