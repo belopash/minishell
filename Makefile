@@ -6,14 +6,14 @@
 #    By: bbrock <bbrock@student.21-school.ru>       +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/01/22 14:55:03 by ashea             #+#    #+#              #
-#    Updated: 2021/01/22 19:57:15 by bbrock           ###   ########.fr        #
+#    Updated: 2021/01/22 20:57:11 by bbrock           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 
 NAME = minishell
 NAME_LIB = libft.a
-COMPIL = gcc -Wall -Wextra -Werror -g ./srcs/main.c ./srcs/*/ft_*.c ./libft.a -I ./includes/
+COMPIL = gcc -g  -Wall -Wextra -Werror ./srcs/main.c ./srcs/*/ft_*.c ./libft.a -I ./includes/
 FLAGS = -Wall -Wextra -Werror
 INCS = ./includes/
 HDRS = libft.h

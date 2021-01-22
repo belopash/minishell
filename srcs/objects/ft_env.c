@@ -6,7 +6,7 @@
 /*   By: bbrock <bbrock@student.21-school.ru>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/15 14:26:12 by bbrock            #+#    #+#             */
-/*   Updated: 2021/01/22 20:09:07 by bbrock           ###   ########.fr       */
+/*   Updated: 2021/01/22 21:09:51 by bbrock           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,7 +53,8 @@ static void	del(t_env *env, char *name)
 	while (item)
 	{
 		if (ft_strncmp(item->content, name, namelen) == 0
-			&& *(char *)(item->content + namelen) == '=')
+			&& (*(char *)(item->content + namelen) == '='
+			|| *(char *)(item->content + namelen) == '\0'))
 		{
 			if (prev)
 				prev->next = item->next;
@@ -71,12 +72,15 @@ static void	del(t_env *env, char *name)
 static char	*get(t_env *env, char *name)
 {
 	t_list *item;
+	int namelen;
 
+	namelen = ft_strlen(name);
 	item = env->list;
 	while (item)
 	{
-		if (ft_strncmp(item->content, name, ft_strlen(name)) == 0)
-			return (item->content + ft_strlen(name) + 1);
+		if (ft_strncmp(item->content, name, namelen) == 0
+			&& (*(char *)(item->content + namelen) == '='))
+			return (item->content + namelen + 1);
 		item = item->next;
 	}
 	return (NULL);

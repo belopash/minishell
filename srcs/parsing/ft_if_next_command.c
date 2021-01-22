@@ -6,7 +6,7 @@
 /*   By: bbrock <bbrock@student.21-school.ru>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/22 12:21:12 by ashea             #+#    #+#             */
-/*   Updated: 2021/01/22 20:24:17 by bbrock           ###   ########.fr       */
+/*   Updated: 2021/01/22 20:42:14 by bbrock           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,9 +70,12 @@ int				ft_if_next_command(int *i, char *line,
 	if (line[*i] == ';' || line[*i] == '\0')
 	{
 		if (ft_syntax_error(i, line, command, shell))
-			return (1);
-		(*command)->execute(*command);
-		ft_next_command_ut(shell);
+			line[(*i)] = '\0';
+		else
+		{
+			(*command)->execute(*command);
+			ft_next_command_ut(shell);
+		}
 		(*command)->destroy(*command);
 		*command = new_command(shell, 0, 1);
 		(*i)++;

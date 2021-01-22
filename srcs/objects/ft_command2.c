@@ -6,7 +6,7 @@
 /*   By: bbrock <bbrock@student.21-school.ru>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/21 19:20:06 by bbrock            #+#    #+#             */
-/*   Updated: 2021/01/22 20:15:36 by bbrock           ###   ########.fr       */
+/*   Updated: 2021/01/22 20:59:35 by bbrock           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,8 @@ static char *find_path(char *pathv, char *name)
 	int i;
 
 	i = 0;
-	paths = ft_split(pathv, ':');
+	if (!(paths = ft_split(pathv, ':')))
+		return (name);
 	while (paths[i])
 	{
 		path = ft_pathjoin(paths[i], name);
@@ -81,13 +82,13 @@ int execute(t_command *command)
 	char **args;
 
 	dup2(command->input, 0);
-	if (command->input != 0 && command->input > 0)
-		close(command->input);
 	dup2(command->output, 1);
-	if (command->output != 1 && command->output > 0)
-		close(command->output);
 	if (command->list && command->input >= 0 && command->output >= 0)
-	{
+	{	
+		if (command->input != 0 && command->input > 0)
+			close(command->input);
+		if (command->output != 1 && command->output > 0)
+		close(command->output);
 		args = ft_toarray(command->list);
 		if (execbi(command, args) < 0)
 			start_process(command, args);

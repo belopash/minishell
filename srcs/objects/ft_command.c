@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   command.c                                          :+:      :+:    :+:   */
+/*   ft_command.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: bbrock <bbrock@student.21-school.ru>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/11 18:16:09 by bbrock            #+#    #+#             */
-/*   Updated: 2021/01/22 19:54:14 by bbrock           ###   ########.fr       */
+/*   Updated: 2021/01/22 20:36:40 by bbrock           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,10 @@ static void	destroy(t_command *command)
 		return ;
 	ft_lstclear(&(command->list), free);
 	ft_bzero(command, sizeof(t_command));
+	if (command->input != 0 && command->input > 0)
+		close(command->input);
+	if (command->output != 1 && command->output > 0)
+		close(command->output);
 	free(command);
 }
 
