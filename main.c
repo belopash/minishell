@@ -20,16 +20,18 @@
 int	main(int argc, char **argv, char **envp)
 {
 	static t_builtin	builtins[] = {
-		(t_builtin){"echo", ft_echo},
-		(t_builtin){"cd", ft_cd},
-		(t_builtin){"pwd", ft_pwd},
-		(t_builtin){"env", ft_env},
-		(t_builtin){"export", ft_export},
-		(t_builtin){"unset", ft_unset},
-		(t_builtin){"exit", ft_exit},
-		{0, 0}};
+		(t_builtin){"echo", ft_echo, 0, 0},
+		(t_builtin){"cd", ft_cd, 0, 0},
+		(t_builtin){"pwd", ft_pwd, 0, 0},
+		(t_builtin){"env", ft_env, 0, 0},
+		(t_builtin){"export", ft_export, 0, 0},
+		(t_builtin){"unset", ft_unset, 0, 0},
+		(t_builtin){"exit", ft_exit, 0, 0},
+		{0, 0, 0, 0}};
 	t_shell				*shell;
 
+    (void)argc;
+    (void)argv;
 	if (!(shell = new_shell(envp, builtins)))
 		return (1);
 	shell->start(shell);

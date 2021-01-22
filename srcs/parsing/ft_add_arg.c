@@ -6,13 +6,13 @@
 /*   By: bbrock <bbrock@student.21-school.ru>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/22 12:59:07 by ashea             #+#    #+#             */
-/*   Updated: 2021/01/22 12:49:02 by bbrock           ###   ########.fr       */
+/*   Updated: 2021/01/22 16:07:48 by ashea            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/parsing.h"
 
-void	ft_add_arg(int *j, char **content, t_command *command)
+void		ft_add_arg(int *j, char **content, t_command *command)
 {
 	(*content)[*j] = '\0';
 	*j = 0;

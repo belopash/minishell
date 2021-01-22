@@ -25,7 +25,7 @@ static int	ft_screening(int *j, char *content, char *line)
 	return (0);
 }
 
-int			ft_if_other_char(int *j, char *content, char *line, t_shell *shell)
+int			ft_if_other_char(int *j, char *content, char *line)
 {
 	int		i;
 

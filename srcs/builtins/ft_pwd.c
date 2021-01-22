@@ -23,6 +23,8 @@ int	ft_pwd(t_builtin *builtin, char **args)
 {
 	char buf[PATH_MAX + 1];
 
+    (void)builtin;
+    (void)args;
 	if (!getcwd(buf, PATH_MAX))
 		return (1);
 	write(1, buf, ft_strlen(buf));
