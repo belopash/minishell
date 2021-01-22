@@ -6,7 +6,7 @@
 /*   By: bbrock <bbrock@student.21-school.ru>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/15 14:26:12 by bbrock            #+#    #+#             */
-/*   Updated: 2021/01/22 21:09:51 by bbrock           ###   ########.fr       */
+/*   Updated: 2021/01/22 21:51:10 by bbrock           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,8 +71,8 @@ static void	del(t_env *env, char *name)
 
 static char	*get(t_env *env, char *name)
 {
-	t_list *item;
-	int namelen;
+	t_list	*item;
+	int		namelen;
 
 	namelen = ft_strlen(name);
 	item = env->list;

@@ -6,7 +6,7 @@
 /*   By: bbrock <bbrock@student.21-school.ru>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/22 12:28:45 by ashea             #+#    #+#             */
-/*   Updated: 2021/01/22 21:43:48 by bbrock           ###   ########.fr       */
+/*   Updated: 2021/01/22 21:52:27 by bbrock           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,7 @@ static char	*ft_search_env(int *i, char *line, char **env)
 	return (ft_strdup(""));
 }
 
-static void ft_doublefree(void *a, void *b)
+static void	ft_doublefree(void *a, void *b)
 {
 	free(a);
 	free(b);
