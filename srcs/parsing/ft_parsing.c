@@ -6,7 +6,7 @@
 /*   By: bbrock <bbrock@student.21-school.ru>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/22 12:18:01 by ashea             #+#    #+#             */
-/*   Updated: 2021/01/22 14:51:57 by bbrock           ###   ########.fr       */
+/*   Updated: 2021/01/22 20:24:09 by bbrock           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,8 +81,9 @@ int				ft_parsing(t_shell *shell, char *line)
 	command = new_command(shell, 0, 1);
 	signal(SIGINT, donothing);
 	signal(SIGQUIT, donothing);
-	if (line[0] == '\0')
-		return (0);
-	ft_parsing_dop(content, line, &command, shell);
+	if (line[0] != '\0')
+		ft_parsing_dop(content, line, &command, shell);
+	free(content);
+	free(command);
 	return (0);
 }

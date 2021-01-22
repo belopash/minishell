@@ -6,7 +6,7 @@
 /*   By: bbrock <bbrock@student.21-school.ru>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/21 19:20:06 by bbrock            #+#    #+#             */
-/*   Updated: 2021/01/22 20:04:45 by bbrock           ###   ########.fr       */
+/*   Updated: 2021/01/22 20:15:36 by bbrock           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,10 +81,10 @@ int execute(t_command *command)
 	char **args;
 
 	dup2(command->input, 0);
-	if (command->input != 0)
+	if (command->input != 0 && command->input > 0)
 		close(command->input);
 	dup2(command->output, 1);
-	if (command->output != 1)
+	if (command->output != 1 && command->output > 0)
 		close(command->output);
 	if (command->list && command->input >= 0 && command->output >= 0)
 	{
@@ -93,9 +93,9 @@ int execute(t_command *command)
 			start_process(command, args);
 		free(args);
 	}
-	if (command->input != 0)
+	if (command->input != 0 && command->input > 0)
 		dup2(command->shell->in, 0);
-	if (command->input != 1)
+	if (command->output != 1 && command->output > 0)
 		dup2(command->shell->out, 1);
 	return (0);
 }
