@@ -6,7 +6,7 @@
 /*   By: bbrock <bbrock@student.21-school.ru>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/11 18:19:00 by bbrock            #+#    #+#             */
-/*   Updated: 2021/01/22 20:00:36 by bbrock           ###   ########.fr       */
+/*   Updated: 2021/01/23 11:26:18 by bbrock           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,6 @@ int		error(char *name, char *error, int code);
 int		print_name(void);
 void	putnlandname(int s);
 void	delete(int s);
-void ft_free2(char **arr);
+void	ft_free2(char **arr);
 
 #endif
