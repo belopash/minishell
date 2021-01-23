@@ -6,44 +6,43 @@
 #    By: bbrock <bbrock@student.21-school.ru>       +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/01/22 14:55:03 by ashea             #+#    #+#              #
-#    Updated: 2021/01/22 20:57:11 by bbrock           ###   ########.fr        #
+#    Updated: 2021/01/22 14:57:29 by bbrock           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
+NAME		= minishell
+FLAGS		= -g -Wall -Wextra -Werror
+HEADERS		= includes/
 
-NAME = minishell
-NAME_LIB = libft.a
-COMPIL = gcc -g  -Wall -Wextra -Werror ./srcs/main.c ./srcs/*/ft_*.c ./libft.a -I ./includes/
-FLAGS = -Wall -Wextra -Werror
-INCS = ./includes/
-HDRS = libft.h
-REMOVE = rm -f
-SRCS=./lib/libft/ft_bzero.c ./lib/libft/ft_memccpy.c ./lib/libft/ft_memcpy.c ./lib/libft/ft_memmove.c ./lib/libft/ft_memset.c ./lib/libft/ft_memchr.c \
-./lib/libft/ft_memcmp.c ./lib/libft/ft_strlen.c ./lib/libft/ft_strlcpy.c ./lib/libft/ft_strlcat.c ./lib/libft/ft_strchr.c ./lib/libft/ft_strrchr.c \
-./lib/libft/ft_strnstr.c ./lib/libft/ft_strncmp.c ./lib/libft/ft_atoi.c ./lib/libft/ft_isalpha.c ./lib/libft/ft_isdigit.c ./lib/libft/ft_isalnum.c \
-./lib/libft/ft_isascii.c ./lib/libft/ft_isprint.c ./lib/libft/ft_toupper.c ./lib/libft/ft_tolower.c ./lib/libft/ft_calloc.c ./lib/libft/ft_strdup.c \
-./lib/libft/ft_substr.c ./lib/libft/ft_strjoin.c ./lib/libft/ft_strtrim.c ./lib/libft/ft_split.c ./lib/libft/ft_itoa.c ./lib/libft/ft_strmapi.c \
-./lib/libft/ft_putchar_fd.c ./lib/libft/ft_putstr_fd.c ./lib/libft/ft_putendl_fd.c ./lib/libft/ft_putnbr_fd.c ./lib/libft/get_next_line.c ./lib/libft/get_next_line_utils.c \
-./lib/libft/ft_lstnew.c ./lib/libft/ft_lstadd_front.c ./lib/libft/ft_lstsize.c ./lib/libft/ft_lstlast.c ./lib/libft/ft_lstadd_back.c ./lib/libft/ft_lstdelone.c \
-./lib/libft/ft_lstclear.c ./lib/libft/ft_lstiter.c ./lib/libft/ft_lstmap.c
-OBJ = $(SRCS:.c=.o)
+SRCS = srcs/main.c \
+srcs/builtins/ft_cd.c    srcs/builtins/ft_export.c  srcs/objects/ft_builtins_manager.c  srcs/objects/ft_shell.c             srcs/parsing/ft_if_next_command.c  srcs/parsing/ft_if_single_quotes.c \
+srcs/builtins/ft_echo.c  srcs/builtins/ft_pwd.c     srcs/objects/ft_command2.c          srcs/parsing/ft_add_arg.c           srcs/parsing/ft_if_other_char.c    srcs/parsing/ft_parsing.c \
+srcs/builtins/ft_env.c   srcs/builtins/ft_unset.c   srcs/objects/ft_command.c           srcs/parsing/ft_if_double_quotes.c  srcs/parsing/ft_if_pipe.c          srcs/utils/ft_utils2.c \
+srcs/builtins/ft_exit.c  srcs/objects/ft_builtin.c  srcs/objects/ft_env.c               srcs/parsing/ft_if_env.c            srcs/parsing/ft_if_redirect.c      srcs/utils/ft_utils.c
 
-%.o: %.c $(HDRS)
+OBJS	= $(SRCS:.c=.o)
+LIBFT 	= libft/libft.a
 
-all: $(NAME_LIB) $(NAME)
+all: $(NAME)
 
-$(NAME_LIB): $(OBJ)
-	ar rc $(NAME_LIB) $^
-	ranlib $(NAME_LIB)
-	echo "Done!"
+$(NAME) : 	$(LIBFT) $(OBJS) $(HEADERS)
+			gcc $(FLAGS) -I $(HEADERS) $(OBJS) $(LIBFT) -lncurses -o $(NAME)
 
-$(NAME):
-	$(COMPIL) -o $(NAME)
+$(LIBFT):
+			make -C libft
+
+
+%.o: %.c
+			$(BUILD_PRINT)
+			gcc -g $(FLAGS) -I $(HEADERS) -c $< -o $@
 
 clean:
-	$(REMOVE) $(OBJ)
+			$(MAKE) -C libft/ clean
+			rm -f $(OBJS)
 
-fclean: clean
-	$(REMOVE) $(NAME_LIB) $(NAME)
+fclean: 	clean
+			$(MAKE) -C libft/ fclean
+			rm -f $(NAME)
 
 re: fclean all
+.PHONY: all fclean clean re

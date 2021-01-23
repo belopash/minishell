@@ -40,9 +40,9 @@ int			ft_if_other_char(int *j, char *content, char *line)
 		i += 1 + ft_screening(j, content, line + 1);
 		return (i);
 	}
-	while (line[i] != ' ' && line[i] != '\0' && line[i] != '\'' &&
+	if (line[i] != ' ' && line[i] != '\0' && line[i] != '\'' &&
 			line[i] != '"' && line[i] != ';' && line[i] != '|' &&
-			line[i] != '>' && line[i] != '<' && line[i] != '$')
+			line[i] != '>' && line[i] != '<')
 	{
 		content[*j] = line[i];
 		(*j)++;
