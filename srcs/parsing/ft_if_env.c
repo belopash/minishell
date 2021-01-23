@@ -6,7 +6,7 @@
 /*   By: bbrock <bbrock@student.21-school.ru>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/22 12:28:45 by ashea             #+#    #+#             */
-/*   Updated: 2021/01/23 10:37:19 by bbrock           ###   ########.fr       */
+/*   Updated: 2021/01/23 11:10:15 by bbrock           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,30 +15,23 @@
 
 static char	*ft_search_env(int *i, char *line, char **env)
 {
-	char	*var;
 	int		j;
 	int		k;
 
-	if (!(var = (char *)malloc(sizeof(char) * (PATH_MAX + 1))))
-		exit(-1);
-	j = 0;
+	j = *i;
 	while (line[*i] != ' ' && line[*i] != '$' && line[*i] != '"' &&
 			line[*i] != '\'' && line[*i] != ';' && line[*i])
-		var[j++] = line[(*i)++];
+		(*i)++;
 	k = 0;
 	while (env[k])
 	{
-		if (!ft_strncmp(env[k], var, j))
+		if (!ft_strncmp(env[k], line + j, *i - j))
 		{
-			if (env[k][j] == '=')
-			{
-				free(var);
-				return (ft_strdup(env[k] + j + 1));
-			}
+			if (env[k][*i - j] == '=')
+				return (ft_strdup(env[k] + *i - j + 1));
 		}
 		k++;
 	}
-	free(var);
 	return (ft_strdup(""));
 }
 
