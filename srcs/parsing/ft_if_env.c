@@ -6,7 +6,7 @@
 /*   By: bbrock <bbrock@student.21-school.ru>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/22 12:28:45 by ashea             #+#    #+#             */
-/*   Updated: 2021/01/22 21:52:27 by bbrock           ###   ########.fr       */
+/*   Updated: 2021/01/23 10:37:19 by bbrock           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,9 +30,11 @@ static char	*ft_search_env(int *i, char *line, char **env)
 	{
 		if (!ft_strncmp(env[k], var, j))
 		{
-			free(var);
 			if (env[k][j] == '=')
+			{
+				free(var);
 				return (ft_strdup(env[k] + j + 1));
+			}
 		}
 		k++;
 	}
