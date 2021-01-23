@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_if_pipe.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ashea <ashea@student.21-school.ru>         +#+  +:+       +#+        */
+/*   By: bbrock <bbrock@student.21-school.ru>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/22 12:25:38 by ashea             #+#    #+#             */
-/*   Updated: 2021/01/22 13:39:13 by ashea            ###   ########.fr       */
+/*   Updated: 2021/01/23 15:01:59 by bbrock           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,12 +34,12 @@ int			ft_if_pipe(int *i, char *line, t_command **command, t_shell *shell)
 		if (ft_syntax_error_pipe(i, command, shell))
 			return (1);
 		pipe(fd_p);
-		if ((*command)->type == DEFAULT)
+		if (((*command)->type & REDIRECT) == REDIRECT)
+			close(fd_p[1]);
+		else
 			(*command)->output = fd_p[1];
 		(*command)->type = (*command)->type | PIPE;
 		(*command)->execute(*command);
-		if (((*command)->type & REDIRECT) == REDIRECT)
-			close(fd_p[1]);
 		(*command)->destroy(*command);
 		*command = new_command(shell, fd_p[0], 1);
 		(*command)->type = (*command)->type | PIPE;

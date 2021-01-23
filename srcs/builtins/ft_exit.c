@@ -6,7 +6,7 @@
 /*   By: bbrock <bbrock@student.21-school.ru>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/22 11:25:44 by bbrock            #+#    #+#             */
-/*   Updated: 2021/01/22 12:50:36 by bbrock           ###   ########.fr       */
+/*   Updated: 2021/01/23 14:07:51 by bbrock           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,7 @@ int	ft_isnumber(char *str)
 	{
 		if (!ft_isdigit(str[i]))
 			return (0);
+		i++;
 	}
 	return (1 && i);
 }
