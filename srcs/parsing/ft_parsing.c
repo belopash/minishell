@@ -6,7 +6,7 @@
 /*   By: bbrock <bbrock@student.21-school.ru>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/22 12:18:01 by ashea             #+#    #+#             */
-/*   Updated: 2021/01/24 16:37:38 by bbrock           ###   ########.fr       */
+/*   Updated: 2021/01/24 16:44:29 by bbrock           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,9 +31,9 @@ static int		ft_parsing_arg(int *j, char *content, char *line,
 
 static int		ft_parsing_special_character(int *i, char *line, t_command *command)
 {
-	if (ft_if_next_command(i, line, command))
+	if (ft_if_next_command(i, line, &command))
 		return (1);
-	if (ft_if_pipe(i, line, command))
+	if (ft_if_pipe(i, line, &command))
 		return (1);
 	if (ft_if_redirect(i, line, command))
 		return (1);
@@ -80,7 +80,7 @@ int				ft_parsing(t_shell *shell, char *line)
 	signal(SIGINT, donothing);
 	signal(SIGQUIT, donothing);
 	if (line[0] != '\0')
-		ft_parsing_dop(content, line, &command);
+		ft_parsing_dop(content, line, command);
 	free(content);
 	command->destroy(command);
 	return (0);
