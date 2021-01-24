@@ -6,7 +6,7 @@
 /*   By: bbrock <bbrock@student.21-school.ru>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/22 12:18:01 by ashea             #+#    #+#             */
-/*   Updated: 2021/01/24 16:44:29 by bbrock           ###   ########.fr       */
+/*   Updated: 2021/01/24 17:43:26 by bbrock           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,18 +29,18 @@ static int		ft_parsing_arg(int *j, char *content, char *line,
 	return (0);
 }
 
-static int		ft_parsing_special_character(int *i, char *line, t_command *command)
+static int		ft_parsing_special_character(int *i, char *line, t_command **command)
 {
-	if (ft_if_next_command(i, line, &command))
+	if (ft_if_next_command(i, line, command))
 		return (1);
-	if (ft_if_pipe(i, line, &command))
+	if (ft_if_pipe(i, line, command))
 		return (1);
-	if (ft_if_redirect(i, line, command))
+	if (ft_if_redirect(i, line, *command))
 		return (1);
 	return (0);
 }
 
-static void		ft_parsing_dop(char *content, char *line, t_command *command)
+static void		ft_parsing_dop(char *content, char *line, t_command **command)
 {
 	int			i;
 	int			j;
@@ -53,10 +53,10 @@ static void		ft_parsing_dop(char *content, char *line, t_command *command)
 		if ((line[i] == ' ' || line[i] == '\0' ||
 					line[i] == ';' || line[i] == '|' ||
 					line[i] == '>' || line[i] == '<') && (j > 0))
-			ft_add_arg(&j, content, command);
+			ft_add_arg(&j, content, *command);
 		if (ft_parsing_special_character(&i, line, command))
 			continue;
-		if ((delta = ft_parsing_arg(&j, content, line + i, command)) > 0)
+		if ((delta = ft_parsing_arg(&j, content, line + i, *command)) > 0)
 		{
 			i += delta;
 			continue;
@@ -74,13 +74,13 @@ int				ft_parsing(t_shell *shell, char *line)
 	char		*content;
 	t_command	*command;
 
-	if (!(content = (char *)malloc(sizeof(char) * (PATH_MAX + 1))))
+	if (!(content = (char *)ft_calloc((ft_strlen(line) + 1), sizeof(char))))
 		exit(-1);
 	command = new_command(shell, 0, 1);
 	signal(SIGINT, donothing);
 	signal(SIGQUIT, donothing);
 	if (line[0] != '\0')
-		ft_parsing_dop(content, line, command);
+		ft_parsing_dop(content, line, &command);
 	free(content);
 	command->destroy(command);
 	return (0);
