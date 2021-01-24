@@ -1,29 +1,30 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   t_env.h                                            :+:      :+:    :+:   */
+/*   ft_strjoin.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: bbrock <bbrock@student.21-school.ru>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2021/01/15 14:21:03 by bbrock            #+#    #+#             */
-/*   Updated: 2021/01/22 20:09:27 by bbrock           ###   ########.fr       */
+/*   Created: 2020/05/03 19:16:05 by bbrock            #+#    #+#             */
+/*   Updated: 2021/01/22 21:57:17 by bbrock           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef T_ENV_H
-# define T_ENV_H
+#include "libft.h"
 
-# include "libft.h"
-
-typedef struct	s_env
+char	*ft_strjoin(char const *s1, char const *s2)
 {
-	t_list	*list;
-	char	*(*get)(struct s_env *, char *);
-	void	(*add)(struct s_env *, char *);
-	void	(*del)(struct s_env *, char *);
-	void	(*destroy)(struct s_env *);
-}				t_env;
+	char	*new;
+	size_t	len1;
+	size_t	len2;
 
-t_env			*new_env(char **envs);
-
-#endif
+	if (!s1 || !s2)
+		return (NULL);
+	len1 = ft_strlen(s1);
+	len2 = ft_strlen(s2);
+	if (!(new = (char *)ft_calloc(len1 + len2 + 1, sizeof(char))))
+		return (NULL);
+	ft_strlcpy(new, s1, len1 + len2 + 1);
+	ft_strlcat(new, s2, len1 + len2 + 1);
+	return (new);
+}

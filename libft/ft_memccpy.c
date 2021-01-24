@@ -1,29 +1,36 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   t_env.h                                            :+:      :+:    :+:   */
+/*   ft_memccpy.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: bbrock <bbrock@student.21-school.ru>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2021/01/15 14:21:03 by bbrock            #+#    #+#             */
-/*   Updated: 2021/01/22 20:09:27 by bbrock           ###   ########.fr       */
+/*   Created: 2020/05/01 10:42:17 by bbrock            #+#    #+#             */
+/*   Updated: 2021/01/22 21:54:51 by bbrock           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef T_ENV_H
-# define T_ENV_H
+#include "libft.h"
 
-# include "libft.h"
-
-typedef struct	s_env
+void	*ft_memccpy(void *dst, const void *src, int c, size_t n)
 {
-	t_list	*list;
-	char	*(*get)(struct s_env *, char *);
-	void	(*add)(struct s_env *, char *);
-	void	(*del)(struct s_env *, char *);
-	void	(*destroy)(struct s_env *);
-}				t_env;
+	t_byte	*s_dst;
+	t_byte	*s_src;
+	t_byte	s_c;
+	size_t	i;
 
-t_env			*new_env(char **envs);
-
-#endif
+	if (dst == NULL && src == NULL)
+		return (dst);
+	s_dst = (t_byte *)dst;
+	s_src = (t_byte *)src;
+	s_c = (t_byte)c;
+	i = 0;
+	while (i < n)
+	{
+		s_dst[i] = s_src[i];
+		if (s_src[i] == s_c)
+			return (&s_dst[++i]);
+		i++;
+	}
+	return (NULL);
+}

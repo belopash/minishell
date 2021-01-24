@@ -1,29 +1,33 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   t_env.h                                            :+:      :+:    :+:   */
+/*   ft_memmove.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: bbrock <bbrock@student.21-school.ru>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2021/01/15 14:21:03 by bbrock            #+#    #+#             */
-/*   Updated: 2021/01/22 20:09:27 by bbrock           ###   ########.fr       */
+/*   Created: 2020/05/01 10:42:43 by bbrock            #+#    #+#             */
+/*   Updated: 2021/01/22 21:55:13 by bbrock           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef T_ENV_H
-# define T_ENV_H
+#include "libft.h"
 
-# include "libft.h"
-
-typedef struct	s_env
+void	*ft_memmove(void *dst, const void *src, size_t n)
 {
-	t_list	*list;
-	char	*(*get)(struct s_env *, char *);
-	void	(*add)(struct s_env *, char *);
-	void	(*del)(struct s_env *, char *);
-	void	(*destroy)(struct s_env *);
-}				t_env;
+	t_byte *s_dst;
+	t_byte *s_src;
 
-t_env			*new_env(char **envs);
-
-#endif
+	if (!dst && !src)
+		return (NULL);
+	s_dst = (t_byte *)dst;
+	s_src = (t_byte *)src;
+	if (s_dst < s_src || s_src + n < s_dst)
+		return (ft_memcpy(dst, src, n));
+	else
+		while (n)
+		{
+			n--;
+			s_dst[n] = s_src[n];
+		}
+	return (dst);
+}

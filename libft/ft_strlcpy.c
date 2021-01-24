@@ -1,29 +1,31 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   t_env.h                                            :+:      :+:    :+:   */
+/*   ft_strlcpy.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: bbrock <bbrock@student.21-school.ru>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2021/01/15 14:21:03 by bbrock            #+#    #+#             */
-/*   Updated: 2021/01/22 20:09:27 by bbrock           ###   ########.fr       */
+/*   Created: 2020/05/01 16:15:10 by bbrock            #+#    #+#             */
+/*   Updated: 2021/01/22 21:57:27 by bbrock           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef T_ENV_H
-# define T_ENV_H
+#include "libft.h"
 
-# include "libft.h"
-
-typedef struct	s_env
+size_t	ft_strlcpy(char *dst, const char *src, size_t size)
 {
-	t_list	*list;
-	char	*(*get)(struct s_env *, char *);
-	void	(*add)(struct s_env *, char *);
-	void	(*del)(struct s_env *, char *);
-	void	(*destroy)(struct s_env *);
-}				t_env;
+	size_t	srclen;
 
-t_env			*new_env(char **envs);
-
-#endif
+	srclen = ft_strlen(src);
+	if (size > 0 && dst)
+	{
+		if (srclen + 1 < size)
+			ft_memmove(dst, src, srclen + 1);
+		else
+		{
+			ft_memmove(dst, src, size - 1);
+			dst[size - 1] = '\0';
+		}
+	}
+	return (srclen);
+}

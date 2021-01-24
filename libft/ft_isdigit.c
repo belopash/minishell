@@ -1,29 +1,18 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   t_env.h                                            :+:      :+:    :+:   */
+/*   ft_isdigit.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: bbrock <bbrock@student.21-school.ru>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2021/01/15 14:21:03 by bbrock            #+#    #+#             */
-/*   Updated: 2021/01/22 20:09:27 by bbrock           ###   ########.fr       */
+/*   Created: 2020/05/01 23:32:17 by bbrock            #+#    #+#             */
+/*   Updated: 2021/01/22 21:53:37 by bbrock           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef T_ENV_H
-# define T_ENV_H
+#include "libft.h"
 
-# include "libft.h"
-
-typedef struct	s_env
+int	ft_isdigit(int c)
 {
-	t_list	*list;
-	char	*(*get)(struct s_env *, char *);
-	void	(*add)(struct s_env *, char *);
-	void	(*del)(struct s_env *, char *);
-	void	(*destroy)(struct s_env *);
-}				t_env;
-
-t_env			*new_env(char **envs);
-
-#endif
+	return (c >= '0' && c <= '9');
+}

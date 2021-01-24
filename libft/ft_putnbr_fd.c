@@ -1,29 +1,30 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   t_env.h                                            :+:      :+:    :+:   */
+/*   ft_putnbr_fd.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: bbrock <bbrock@student.21-school.ru>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2021/01/15 14:21:03 by bbrock            #+#    #+#             */
-/*   Updated: 2021/01/22 20:09:27 by bbrock           ###   ########.fr       */
+/*   Created: 2020/05/07 11:55:49 by bbrock            #+#    #+#             */
+/*   Updated: 2021/01/22 21:55:38 by bbrock           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef T_ENV_H
-# define T_ENV_H
+#include "libft.h"
 
-# include "libft.h"
-
-typedef struct	s_env
+static	char	itoc(int n)
 {
-	t_list	*list;
-	char	*(*get)(struct s_env *, char *);
-	void	(*add)(struct s_env *, char *);
-	void	(*del)(struct s_env *, char *);
-	void	(*destroy)(struct s_env *);
-}				t_env;
+	if (n / 10 != 0)
+		return ('0');
+	n = (n < 0) ? -n : n;
+	return ('0' + n);
+}
 
-t_env			*new_env(char **envs);
-
-#endif
+void			ft_putnbr_fd(int n, int fd)
+{
+	if (n / 10 != 0)
+		ft_putnbr_fd(n / 10, fd);
+	else if (n < 0)
+		ft_putchar_fd('-', fd);
+	ft_putchar_fd(itoc(n % 10), fd);
+}

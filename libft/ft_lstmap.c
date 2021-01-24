@@ -1,29 +1,34 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   t_env.h                                            :+:      :+:    :+:   */
+/*   ft_lstmap.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: bbrock <bbrock@student.21-school.ru>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2021/01/15 14:21:03 by bbrock            #+#    #+#             */
-/*   Updated: 2021/01/22 20:09:27 by bbrock           ###   ########.fr       */
+/*   Created: 2020/05/07 14:05:39 by bbrock            #+#    #+#             */
+/*   Updated: 2021/01/22 21:54:31 by bbrock           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef T_ENV_H
-# define T_ENV_H
+#include "libft.h"
 
-# include "libft.h"
-
-typedef struct	s_env
+t_list	*ft_lstmap(t_list *lst, void *(*f)(void *), void (*del)(void *))
 {
-	t_list	*list;
-	char	*(*get)(struct s_env *, char *);
-	void	(*add)(struct s_env *, char *);
-	void	(*del)(struct s_env *, char *);
-	void	(*destroy)(struct s_env *);
-}				t_env;
+	t_list	*newlst;
+	t_list	*elem;
 
-t_env			*new_env(char **envs);
-
-#endif
+	if (!lst || !f || !(newlst = ft_lstnew(f(lst->content))))
+		return (NULL);
+	elem = newlst;
+	lst = lst->next;
+	while (lst)
+	{
+		if (!(elem->next = ft_lstnew(f(lst->content))))
+		{
+			ft_lstclear(&newlst, del);
+		}
+		elem = elem->next;
+		lst = lst->next;
+	}
+	return (newlst);
+}

@@ -12,11 +12,11 @@
 
 #include "../includes/parsing.h"
 
-static void	ft_if_not_closed_quotes(int *j, t_shell *shell)
+static void	ft_if_not_closed_quotes(int *j, t_command *command)
 {
 	write(2, "Error: quote not closed\n", 24);
 	(*j) = 0;
-	shell->code = 1;
+	command->shell->code = 1;
 }
 
 static int	ft_if_empty_single_quotes(int *i, int *j, char *content, char *line)
@@ -34,7 +34,7 @@ static int	ft_if_empty_single_quotes(int *i, int *j, char *content, char *line)
 }
 
 int			ft_if_single_quotes(int *j, char *content,
-		char *line, t_shell *shell)
+		char *line, t_command *command)
 {
 	int		i;
 
@@ -51,7 +51,7 @@ int			ft_if_single_quotes(int *j, char *content,
 			i++;
 		}
 		if (line[i] == '\0')
-			ft_if_not_closed_quotes(j, shell);
+			ft_if_not_closed_quotes(j, command);
 		i++;
 	}
 	return (i);
