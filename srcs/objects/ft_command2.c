@@ -6,7 +6,7 @@
 /*   By: bbrock <bbrock@student.21-school.ru>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/21 19:20:06 by bbrock            #+#    #+#             */
-/*   Updated: 2021/01/23 14:46:53 by bbrock           ###   ########.fr       */
+/*   Updated: 2021/01/24 16:31:58 by bbrock           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,6 +89,10 @@ int			execute(t_command *command)
 		close(command->output);
 	if (command->list && command->input >= 0 && command->output >= 0)
 	{
+		if (command->input != 0 && command->input > 0)
+			close(command->input);
+		if (command->output != 1 && command->output > 0)
+			close(command->output);
 		args = ft_toarray(command->list);
 		if (execbi(command, args) < 0)
 			start_process(command, args);

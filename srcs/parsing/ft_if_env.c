@@ -6,7 +6,7 @@
 /*   By: bbrock <bbrock@student.21-school.ru>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/22 12:28:45 by ashea             #+#    #+#             */
-/*   Updated: 2021/01/23 11:19:45 by bbrock           ###   ########.fr       */
+/*   Updated: 2021/01/24 16:32:55 by bbrock           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,9 +41,10 @@ static void	ft_doublefree(void *a, void *b)
 	free(b);
 }
 
-int			ft_if_env(int *j, char *content, char *line, t_shell *shell)
+int			ft_if_env(int *j, char *content, char *line, t_command *command)
 {
 	int		i;
+	int		k;
 	char	*tmp;
 	char	**t;
 
@@ -53,17 +54,24 @@ int			ft_if_env(int *j, char *content, char *line, t_shell *shell)
 					!= '"' && line[i + 1] != '\0') || line[i + 1] == '?'))
 	{
 		i++;
-		t = ft_toarray(shell->env->list);
+		t = ft_toarray(command->shell->env->list);
 		if (line[i] == '?')
 		{
 			i++;
-			if (!(tmp = ft_itoa(shell->code)))
+			if (!(tmp = ft_itoa(command->shell->code)))
 				exit(-1);
 		}
 		else if (!(tmp = ft_search_env(&i, line, t)))
 			exit(-1);
-		ft_strlcpy(content + *j, tmp, ft_strlen(tmp) + 1);
-		(*j) += ft_strlen(tmp);
+		k = 0;
+		while(tmp[k])
+		{
+			if(tmp[k] == ' ' && *j > 0)
+				ft_add_arg(j, content, command);
+			if(tmp[k] != ' ') 
+				content[(*j)++] = tmp[k];
+			k++;
+		}
 		ft_doublefree(tmp, t);
 	}
 	return (i);

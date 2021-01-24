@@ -6,32 +6,31 @@
 /*   By: bbrock <bbrock@student.21-school.ru>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/22 12:25:38 by ashea             #+#    #+#             */
-/*   Updated: 2021/01/23 15:03:35 by bbrock           ###   ########.fr       */
+/*   Updated: 2021/01/24 16:36:08 by bbrock           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/parsing.h"
 
-static int	ft_syntax_error_pipe(int *i,
-		t_command **command, t_shell *shell)
+static int	ft_syntax_error_pipe(int *i, t_command *command)
 {
-	if (!((*command)->list))
+	if (!(command->list))
 	{
 		write(2, "Error: syntax error near unexpected token |\n", 44);
-		shell->code = 1;
+		command->shell->code = 1;
 		(*i)++;
 		return (1);
 	}
 	return (0);
 }
 
-int			ft_if_pipe(int *i, char *line, t_command **command, t_shell *shell)
+int			ft_if_pipe(int *i, char *line, t_command **command)
 {
 	int		fd_p[2];
 
 	if (line[*i] == '|')
 	{
-		if (ft_syntax_error_pipe(i, command, shell))
+		if (ft_syntax_error_pipe(i, command))
 			return (1);
 		pipe(fd_p);
 		if (((*command)->type & REDIRECT) == REDIRECT)
@@ -41,7 +40,7 @@ int			ft_if_pipe(int *i, char *line, t_command **command, t_shell *shell)
 		(*command)->type = (*command)->type | PIPE;
 		(*command)->execute(*command);
 		(*command)->destroy(*command);
-		*command = new_command(shell, fd_p[0], 1);
+		*command = new_command((*command)->shell, fd_p[0], 1);
 		(*command)->type = (*command)->type | PIPE;
 		(*i)++;
 		return (1);
