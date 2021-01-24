@@ -6,7 +6,7 @@
 /*   By: bbrock <bbrock@student.21-school.ru>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/22 12:21:12 by ashea             #+#    #+#             */
-/*   Updated: 2021/01/24 16:39:41 by bbrock           ###   ########.fr       */
+/*   Updated: 2021/01/24 16:59:36 by bbrock           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,6 +65,8 @@ static int		ft_syntax_error(int *i, char *line, t_command *command)
 
 int				ft_if_next_command(int *i, char *line, t_command **command)
 {
+	t_shell *shell;
+	
 	if (line[*i] == ';' || line[*i] == '\0')
 	{
 		if (ft_syntax_error(i, line, *command))
@@ -74,8 +76,9 @@ int				ft_if_next_command(int *i, char *line, t_command **command)
 			(*command)->execute(*command);
 			ft_next_command_ut(*command);
 		}
+		shell = (*command)->shell;
 		(*command)->destroy(*command);
-		*command = new_command((*command)->shell, 0, 1);
+		*command = new_command(shell, 0, 1);
 		(*i)++;
 		return (1);
 	}
