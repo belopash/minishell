@@ -6,7 +6,7 @@
 /*   By: bbrock <bbrock@student.21-school.ru>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/22 12:18:01 by ashea             #+#    #+#             */
-/*   Updated: 2021/01/26 17:12:34 by ashea            ###   ########.fr       */
+/*   Updated: 2021/01/26 15:43:29 by bbrock           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,7 +75,7 @@ int				ft_parsing(t_shell *shell, char *line)
 	char		*content;
 	t_command	*command;
 
-	if (!(content = (char *)ft_calloc((ft_strlen(line) * PATH_MAX + 1),
+	if (!(content = (char *)ft_calloc((ft_strlen(line) + PATH_MAX + 1),
 					sizeof(char))))
 		exit(-1);
 	command = new_command(shell, 0, 1);

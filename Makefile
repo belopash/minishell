@@ -6,7 +6,7 @@
 #    By: bbrock <bbrock@student.21-school.ru>       +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/01/22 14:55:03 by ashea             #+#    #+#              #
-#    Updated: 2021/01/22 14:57:29 by bbrock           ###   ########.fr        #
+#    Updated: 2021/01/26 15:44:19 by bbrock           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -25,7 +25,7 @@ LIBFT 	= libft/libft.a
 
 all: $(NAME)
 
-$(NAME) : 	$(LIBFT) $(OBJS) $(HEADERS)
+$(NAME) : 	$(LIBFT) $(OBJS)
 			gcc $(FLAGS) -I $(HEADERS) $(OBJS) $(LIBFT) -lncurses -o $(NAME)
 
 $(LIBFT):
