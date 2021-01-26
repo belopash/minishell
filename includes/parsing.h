@@ -6,7 +6,7 @@
 /*   By: bbrock <bbrock@student.21-school.ru>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/22 12:09:41 by ashea             #+#    #+#             */
-/*   Updated: 2021/01/24 16:39:00 by bbrock           ###   ########.fr       */
+/*   Updated: 2021/01/26 17:06:31 by ashea            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,8 +40,10 @@ int		ft_if_next_command(int *i, char *line, t_command **command);
 int		ft_if_pipe(int *i, char *line, t_command **command);
 int		ft_if_redirect(int *i, char *line, t_command *command);
 int		ft_if_env(int *j, char *content, char *line, t_command *command);
-int		ft_if_double_quotes(int *j, char *content, char *line, t_command *command);
-int		ft_if_single_quotes(int *j, char *content, char *line, t_command *command);
+int		ft_if_double_quotes(int *j, char *content, char *line,
+		t_command *command);
+int		ft_if_single_quotes(int *j, char *content, char *line,
+		t_command *command);
 int		ft_if_other_char(int *j, char *content, char *line);
 
 #endif

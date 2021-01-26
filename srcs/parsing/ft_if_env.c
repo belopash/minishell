@@ -6,7 +6,7 @@
 /*   By: bbrock <bbrock@student.21-school.ru>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/22 12:28:45 by ashea             #+#    #+#             */
-/*   Updated: 2021/01/24 16:32:55 by bbrock           ###   ########.fr       */
+/*   Updated: 2021/01/26 17:10:45 by ashea            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,10 +41,25 @@ static void	ft_doublefree(void *a, void *b)
 	free(b);
 }
 
+static void	ft_if_env_dop(char *tmp, int *j, char *content, t_command *command)
+{
+	int		k;
+
+	k = 0;
+	while (tmp[k])
+	{
+		if (tmp[k] == ' ' && *j > 0)
+			ft_add_arg(j, content, command);
+		if (tmp[k] != ' ')
+			content[(*j)++] = tmp[k];
+		k++;
+	}
+	content[(*j)] = '\0';
+}
+
 int			ft_if_env(int *j, char *content, char *line, t_command *command)
 {
 	int		i;
-	int		k;
 	char	*tmp;
 	char	**t;
 
@@ -63,15 +78,7 @@ int			ft_if_env(int *j, char *content, char *line, t_command *command)
 		}
 		else if (!(tmp = ft_search_env(&i, line, t)))
 			exit(-1);
-		k = 0;
-		while(tmp[k])
-		{
-			if(tmp[k] == ' ' && *j > 0)
-				ft_add_arg(j, content, command);
-			if(tmp[k] != ' ') 
-				content[(*j)++] = tmp[k];
-			k++;
-		}
+		ft_if_env_dop(tmp, j, content, command);
 		ft_doublefree(tmp, t);
 	}
 	return (i);
